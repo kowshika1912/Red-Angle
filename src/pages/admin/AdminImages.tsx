@@ -173,7 +173,6 @@ const AdminImages = () => {
                   aspectRatio: '1',
                   border: '1px solid var(--color-border)',
                   background: 'var(--color-surface)',
-                  group: 'item',
                 }}
                 className="image-grid-item"
               >
