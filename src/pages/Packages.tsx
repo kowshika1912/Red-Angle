@@ -15,15 +15,15 @@ import img7 from '../assets/Tamil Wedding in London.jpg';
 const packageCategories = ['All', 'WEDDING', 'MATERNITY', 'FASHION', 'CORPORATE', 'COMMERCIAL'];
 
 // Smooth, cinematic fade-up animation
-const fadeUp = {
+const fadeUp: any = {
   hidden: { opacity: 0, y: 50 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.8,
       delay: i * 0.15,
-      ease: [0.21, 0.47, 0.32, 0.98] // Custom easing for a premium feel
+      ease: [0.21, 0.47, 0.32, 0.98]
     },
   }),
 };
