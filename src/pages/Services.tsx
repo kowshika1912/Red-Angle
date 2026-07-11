@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Camera, Film, Star, Users, Heart, Briefcase, Baby, Shirt } from 'lucide-react';
 
@@ -9,6 +9,34 @@ const fadeUp = {
     opacity: 1, y: 0,
     transition: { duration: 0.7, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] as unknown as any },
   }),
+};
+
+const customEasing: [number, number, number, number] = [0.6, 0.01, -0.05, 0.95];
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+  }
+};
+
+const textRevealVariants: Variants = {
+  hidden: { opacity: 0, y: "100%" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.2, ease: customEasing }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1, ease: customEasing }
+  }
 };
 
 const services = [
@@ -81,18 +109,27 @@ const services = [
 const Services = () => {
   return (
     <div className="page-enter">
-      <section className="page-hero">
-        <div className="container">
+      <section className="page-hero" style={{ padding: '6rem 0 4rem', display: 'flex', alignItems: 'center' }}>
+        <div className="container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            style={{ textAlign: 'center' }}
           >
-            <div className="section-tag" style={{ justifyContent: 'center' }}>What We Offer</div>
-            <h1 className="section-title" style={{ marginTop: 'var(--space-md)' }}>Our Services</h1>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: 500, margin: 'var(--space-md) auto 0', textAlign: 'center' }}>
+            <motion.div variants={itemVariants} className="section-tag" style={{ justifyContent: 'center', color: '#666666', textTransform: 'uppercase', letterSpacing: '3px', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1.5rem' }}>
+              — WHAT WE OFFER —
+            </motion.div>
+            
+            <div style={{ overflow: 'hidden', paddingBottom: '0.5rem' }}>
+              <motion.h1 variants={textRevealVariants} className="section-title" style={{ margin: 0, textAlign: 'center', fontSize: '4.5rem', fontWeight: '400', fontFamily: '"Playfair Display", "Cormorant Garamond", serif', fontStyle: 'italic', color: '#c5a059' }}>
+                Our Services
+              </motion.h1>
+            </div>
+            
+            <motion.p variants={itemVariants} style={{ color: '#666666', maxWidth: 600, margin: '1.5rem auto 0', textAlign: 'center', lineHeight: '1.8', fontSize: '1.125rem' }}>
               Professional photography and videography services tailored to capture every milestone
-            </p>
+            </motion.p>
           </motion.div>
         </div>
       </section>

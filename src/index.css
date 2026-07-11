@@ -5,12 +5,12 @@
 ============================================ */
 :root {
   /* Colors */
-  --color-bg: #0a0805;
-  --color-bg-2: #0f0d09;
-  --color-surface: #141209;
-  --color-surface-2: #1c1810;
-  --color-border: rgba(212, 165, 87, 0.15);
-  --color-border-2: rgba(212, 165, 87, 0.08);
+  --color-bg: #ffffff;
+  --color-bg-2: #f8f8f8;
+  --color-surface: #f0f0f0;
+  --color-surface-2: #e8e8e8;
+  --color-border: rgba(212, 165, 87, 0.4);
+  --color-border-2: rgba(212, 165, 87, 0.2);
 
   /* Gold Palette */
   --gold-100: #f5e6c8;
@@ -21,14 +21,14 @@
   --gold-glow: rgba(212, 165, 87, 0.3);
 
   /* Text */
-  --text-primary: #f0e8d5;
-  --text-secondary: #a89a7a;
-  --text-muted: #665c4a;
-  --text-accent: #d4a557;
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --text-muted: #555555;
+  --text-accent: #c28a2e;
 
   /* Gradients */
-  --gradient-gold: linear-gradient(135deg, #e8ca8a 0%, #ffffff 30%, #d4a557 60%, #a8711a 100%);
-  --gradient-dark: linear-gradient(180deg, #0a0805 0%, #141209 100%);
+  --gradient-gold: linear-gradient(135deg, #c28a2e 0%, #a8711a 50%, #d4a557 100%);
+  --gradient-dark: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
   --gradient-hero: radial-gradient(ellipse at center, rgba(212, 165, 87, 0.1) 0%, transparent 70%);
 
   /* Spacing */
@@ -449,7 +449,7 @@ textarea.form-input {
 }
 
 .navbar.scrolled {
-  background: rgba(10, 8, 5, 0.75);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(212, 165, 87, 0.15);
@@ -477,7 +477,7 @@ textarea.form-input {
 
 .navbar-logo span {
   font-style: normal;
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .navbar-links {
