@@ -38,7 +38,7 @@ const CounterStat = ({ end, label, suffix = '' }) => {
   return (
     <div ref={ref} style={{
       padding: '2rem',
-      background: 'rgba(255, 255, 255, 0.02)',
+      background: 'rgba(0, 0, 0, 0.02)',
       border: '1px solid rgba(212, 165, 87, 0.1)',
       borderRadius: '1rem',
       backdropFilter: 'blur(10px)',
@@ -51,7 +51,7 @@ const CounterStat = ({ end, label, suffix = '' }) => {
       <div style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontFamily: 'var(--font-heading, serif)', fontWeight: 400, color: 'var(--gold-300, #d4a557)', lineHeight: 1 }}>
         {count}{suffix}
       </div>
-      <div style={{ fontSize: '0.85rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '1rem' }}>
+      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '1rem' }}>
         {label}
       </div>
     </div>
@@ -102,7 +102,7 @@ const StackedCard = ({ service, index, activeIndex, total }: any) => {
         borderRadius: '2rem', overflow: 'hidden',
         border: '1px solid rgba(212,165,87,0.2)',
         boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
-        background: '#030404'
+        background: 'var(--color-bg-2)'
       }}>
         {/* Crisp Image without full blur */}
         <img
@@ -145,12 +145,12 @@ const StackedCard = ({ service, index, activeIndex, total }: any) => {
 
             <h3 style={{
               fontSize: 'clamp(2rem, 3vw, 2.8rem)', fontFamily: 'var(--font-heading, serif)',
-              color: '#fff', marginBottom: '1rem', lineHeight: 1.1, fontWeight: 300
+              color: '#ffffff', marginBottom: '1rem', lineHeight: 1.1, fontWeight: 300
             }}>
               {service.title}
             </h3>
 
-            <p style={{ color: '#a0a0a0', fontSize: '1rem', lineHeight: 1.6, maxWidth: '90%', margin: 0 }}>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1rem', lineHeight: 1.6, maxWidth: '90%', margin: 0 }}>
               {service.desc}
             </p>
           </div>
@@ -251,26 +251,12 @@ const Home = () => {
   ] : [];
 
   return (
-    <div style={{ background: '#050505', color: '#fff', overflowX: 'hidden' }}>
+    <div style={{ background: 'var(--color-bg)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
 
       {/* ==================== HERO ==================== */}
       <section ref={heroRef} style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        <motion.div style={{ position: 'absolute', inset: 0, y: heroY }}>
-          {heroImages.map((src, index) => (
-            <motion.div
-              key={src}
-              initial={false}
-              animate={{ opacity: currentBg === index ? 1 : 0, scale: currentBg === index ? 1 : 1.1 }}
-              transition={{ duration: 2.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              style={{
-                position: 'absolute', inset: 0,
-                backgroundImage: `url("${src}")`,
-                backgroundSize: 'cover', backgroundPosition: 'center',
-                zIndex: currentBg === index ? 1 : 0
-              }}
-            />
-          ))}
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.8) 100%), linear-gradient(to bottom, rgba(5,5,5,0.4) 0%, rgba(5,5,5,0.9) 100%)', zIndex: 2 }} />
+        <motion.div style={{ position: 'absolute', inset: 0, y: heroY, background: 'var(--color-bg)' }}>
+          {/* Background removed as requested */}
         </motion.div>
 
         <motion.div style={{ opacity: heroOpacity, position: 'relative', zIndex: 10, width: '100%', padding: '0 5%' }}>
@@ -279,22 +265,22 @@ const Home = () => {
               <div style={{ textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.85rem', color: 'var(--gold-300, #d4a557)', marginBottom: '1.5rem' }}>
                 Premium Photography Studio
               </div>
-              <h1 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3.5rem, 8vw, 7rem)', lineHeight: 1.05, margin: '0 0 2rem 0', fontWeight: 300 }}>
+              <h1 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3.5rem, 8vw, 7rem)', lineHeight: 1.05, margin: '0 0 2rem 0', fontWeight: 300, color: 'var(--text-primary)' }}>
                 Capturing <br />
-                <span style={{ fontStyle: 'italic', color: '#fff' }}>The Ethereal</span>
+                <span style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>The Ethereal</span>
               </h1>
-              <p style={{ color: '#aaa', fontSize: '1.1rem', maxWidth: '500px', lineHeight: 1.8, marginBottom: '3rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '500px', lineHeight: 1.8, marginBottom: '3rem' }}>
                 Where every frame is a masterpiece. Professional curation of light, shadow, and your most intimate moments.
               </p>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 <Link to="/portfolio" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--gold-300, #d4a557)', color: '#000',
+                  display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--gold-300, #d4a557)', color: '#fff',
                   padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none'
                 }}>
                   View Portfolio <ArrowRight size={16} />
                 </Link>
                 <Link to="/contact" style={{
-                  display: 'inline-flex', alignItems: 'center', color: '#fff', border: '1px solid rgba(255,255,255,0.3)',
+                  display: 'inline-flex', alignItems: 'center', color: 'var(--text-primary)', border: '1px solid rgba(0,0,0,0.3)',
                   padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none'
                 }}>
                   Book Session
@@ -311,12 +297,12 @@ const Home = () => {
       </section>
 
       {/* ==================== PREMIUM MARQUEE ==================== */}
-      <div style={{ padding: '2rem 0', background: '#0a0a0a', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+      <div style={{ padding: '2rem 0', background: 'var(--color-surface)', borderBottom: '1px solid rgba(0,0,0,0.05)', overflow: 'hidden' }}>
         <div style={{ display: 'flex', whiteSpace: 'nowrap', animation: 'scrollMarquee 30s linear infinite' }}>
           <style>{`@keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`}</style>
           {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <div key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '2rem', paddingRight: '2rem' }}>
-              <span style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#666' }}>{item}</span>
+              <span style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)' }}>{item}</span>
               <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--gold-300, #d4a557)' }} />
             </div>
           ))}
@@ -330,12 +316,12 @@ const Home = () => {
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1 }}>
             <div style={{ textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.8rem', color: 'var(--gold-300, #d4a557)', marginBottom: '1rem' }}>The Vision</div>
             <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(2.5rem, 4vw, 4rem)', lineHeight: 1.1, marginBottom: '2rem' }}>
-              Artistry in <br /><span style={{ fontStyle: 'italic', color: '#888' }}>Every Frame</span>
+              Artistry in <br /><span style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>Every Frame</span>
             </h2>
-            <p style={{ color: '#999', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
               Red-Angle Studio is a premium photography house. We don't just take pictures; we craft cinematic legacies. With over a decade of dedication, we specialize in immortalizing life's grandest milestones and intimate whispers.
             </p>
-            <Link to="/about" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none', borderBottom: '1px solid var(--gold-300, #d4a557)', paddingBottom: '0.5rem', marginTop: '1rem' }}>
+            <Link to="/about" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none', borderBottom: '1px solid var(--gold-300, #d4a557)', paddingBottom: '0.5rem', marginTop: '1rem' }}>
               Discover Our Story <ArrowRight size={16} />
             </Link>
           </motion.div>
@@ -346,16 +332,16 @@ const Home = () => {
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(45deg, rgba(212,165,87,0.2), transparent)' }} />
             </div>
             {/* Overlapping Badge */}
-            <div style={{ position: 'absolute', bottom: '-2rem', left: '-2rem', background: '#111', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+            <div style={{ position: 'absolute', bottom: '-2rem', left: '-2rem', background: 'var(--color-surface-2)', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
               <div style={{ fontSize: '3rem', fontFamily: 'var(--font-heading, serif)', color: 'var(--gold-300, #d4a557)', lineHeight: 1 }}>10+</div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginTop: '0.5rem' }}>Years of Mastery</div>
+              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Years of Mastery</div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* ==================== STATS ==================== */}
-      <section style={{ padding: '5rem 5%', background: '#0a0a0a', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <section style={{ padding: '5rem 5%', background: 'var(--color-surface)', borderTop: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
           <CounterStat end={500} suffix="+" label="Weddings" />
           <CounterStat end={2000} suffix="+" label="Clients" />
@@ -365,7 +351,7 @@ const Home = () => {
       </section>
 
       {/* ==================== SERVICES (CARD SWAP STACK) ==================== */}
-      <div ref={servicesSectionRef} style={{ position: 'relative', background: '#030404', padding: '8rem 0', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      <div ref={servicesSectionRef} style={{ position: 'relative', background: 'var(--color-bg-2)', padding: '8rem 0', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
 
         {/* Subtle Ambient Glow behind the section */}
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80vw', height: '80vh', background: 'radial-gradient(ellipse, rgba(10,30,25,0.4) 0%, transparent 60%)', pointerEvents: 'none' }} />
@@ -380,16 +366,16 @@ const Home = () => {
 
                 <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3rem, 5vw, 4.5rem)', lineHeight: 1.05, marginBottom: '2rem', fontWeight: 400 }}>
                   Signature <br />
-                  <span style={{ fontStyle: 'italic', color: '#888' }}>Collections</span>
+                  <span style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>Collections</span>
                 </h2>
 
-                <p style={{ color: '#999', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3.5rem', maxWidth: '420px' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3.5rem', maxWidth: '420px' }}>
                   Scroll to explore our specialized disciplines. Each domain is approached with the distinct Red-Angle cinematic philosophy.
                 </p>
 
                 {/* Premium Progress Track */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#666', fontFamily: 'var(--font-heading, serif)', fontStyle: 'italic' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontFamily: 'var(--font-heading, serif)', fontStyle: 'italic' }}>
                     0{activeIndex + 1}
                   </div>
 
@@ -397,7 +383,7 @@ const Home = () => {
                     {services.map((_, idx) => (
                       <div key={idx} style={{
                         flex: 1, height: '2px', borderRadius: '2px',
-                        background: activeIndex === idx ? 'var(--gold-300, #d4a557)' : 'rgba(255,255,255,0.1)',
+                        background: activeIndex === idx ? 'var(--gold-300, #d4a557)' : 'rgba(0,0,0,0.1)',
                         boxShadow: activeIndex === idx ? '0 0 10px rgba(212,165,87,0.5)' : 'none',
                         transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       }} />
@@ -426,19 +412,19 @@ const Home = () => {
       </div>
 
       {/* ==================== PARALLAX TEXT ROW ==================== */}
-      <div style={{ padding: '5rem 0', overflow: 'hidden', background: '#050505' }}>
+      <div style={{ padding: '5rem 0', overflow: 'hidden', background: 'var(--color-bg)' }}>
         <div style={{ display: 'flex', whiteSpace: 'nowrap', animation: 'scrollMarquee 20s linear infinite reverse' }}>
           {[...Array(4)].map((_, i) => (
             <div key={i} style={{ display: 'flex' }}>
-              <span style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontFamily: 'var(--font-heading, serif)', color: '#111', WebkitTextStroke: '1px rgba(255,255,255,0.1)', paddingRight: '4rem' }}>RED-ANGLE</span>
-              <span style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontFamily: 'var(--font-heading, serif)', color: '#fff', paddingRight: '4rem' }}>CINEMA</span>
+              <span style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontFamily: 'var(--font-heading, serif)', color: 'var(--color-surface-2)', WebkitTextStroke: '1px rgba(0,0,0,0.1)', paddingRight: '4rem' }}>RED-ANGLE</span>
+              <span style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', fontFamily: 'var(--font-heading, serif)', color: 'var(--text-primary)', paddingRight: '4rem' }}>CINEMA</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ==================== FEATURED WORK ==================== */}
-      <section style={{ padding: '8rem 5% 3rem 5%', background: '#0a0a0a', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section style={{ padding: '8rem 5% 3rem 5%', background: 'var(--color-surface)', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
             <div>
@@ -449,7 +435,7 @@ const Home = () => {
               .view-all-link { display: none; }
               @media (min-width: 768px) { .view-all-link { display: flex; } }
             `}</style>
-            <Link to="/portfolio" className="view-all-link" style={{ alignItems: 'center', gap: '0.5rem', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none' }}>
+            <Link to="/portfolio" className="view-all-link" style={{ alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none' }}>
               View All <ArrowRight size={16} />
             </Link>
           </div>
@@ -478,21 +464,21 @@ const Home = () => {
                       {album.coverImage ? (
                         <img src={getImageUrl(album.coverImage)} alt={album.title} className={`album-card-${album.id}`} />
                       ) : (
-                        <div style={{ width: '100%', height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Camera size={40} color="rgba(255,255,255,0.1)" />
+                        <div style={{ width: '100%', height: '100%', background: 'var(--color-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Camera size={40} color="rgba(0,0,0,0.1)" />
                         </div>
                       )}
 
                       <div className={`album-overlay-${album.id}`} style={{ position: 'absolute', inset: 0 }} />
 
                       <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem' }}>
-                        <span style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.4rem 1rem', borderRadius: '2rem', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        <span style={{ background: 'rgba(255, 255, 255, 0.5)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.1)', color: '#000000', padding: '0.4rem 1rem', borderRadius: '2rem', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
                           {album.category.replace('_', ' ')}
                         </span>
                       </div>
 
                       <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem' }}>
-                        <h3 style={{ color: '#fff', fontSize: '1.5rem', fontFamily: 'var(--font-heading, serif)', marginBottom: '0.5rem', fontWeight: 400 }}>{album.title}</h3>
+                        <h3 style={{ color: '#ffffff', fontSize: '1.5rem', fontFamily: 'var(--font-heading, serif)', marginBottom: '0.5rem', fontWeight: 400 }}>{album.title}</h3>
                         <p style={{ color: 'var(--gold-300, #d4a557)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
                           {album._count?.images || 0} Captures
                         </p>
@@ -523,13 +509,13 @@ const Home = () => {
                   animate={{ opacity: 1, x: 0, scale: 1 }} 
                   exit={{ opacity: 0, x: -100, scale: 0.9 }} 
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  style={{ flex: '1 1 calc(33.333% - 1.333rem)', minWidth: '300px', maxWidth: '100%', textAlign: 'left', padding: '3rem', background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '1rem' }}
+                  style={{ flex: '1 1 calc(33.333% - 1.333rem)', minWidth: '300px', maxWidth: '100%', textAlign: 'left', padding: '3rem', background: 'var(--color-surface)', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '1rem' }}
                 >
                   <div style={{ color: 'var(--gold-300, #d4a557)', fontSize: '3rem', fontFamily: 'serif', lineHeight: 0.5, marginBottom: '1.5rem' }}>"</div>
-                  <p style={{ color: '#ccc', fontSize: '1.1rem', lineHeight: 1.8, fontStyle: 'italic', marginBottom: '2rem' }}>{t.content}</p>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, fontStyle: 'italic', marginBottom: '2rem' }}>{t.content}</p>
                   <div>
-                    <div style={{ color: '#fff', fontWeight: 600, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.name}</div>
-                    <div style={{ color: '#666', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.3rem' }}>{t.role}</div>
+                    <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.name}</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.3rem' }}>{t.role}</div>
                   </div>
                 </motion.div>
               ))}
@@ -539,16 +525,16 @@ const Home = () => {
       </section>
 
       {/* ==================== CTA ==================== */}
-      <section style={{ padding: '4rem 5% 10rem 5%', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(to bottom, #0a0a0a, #050505)' }}>
+      <section style={{ padding: '4rem 5% 10rem 5%', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.05)', background: 'linear-gradient(to bottom, var(--color-surface), var(--color-bg))' }}>
         <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}>
           <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3rem, 5vw, 5rem)', lineHeight: 1.1, marginBottom: '2rem' }}>
             Let's create your <br /> <span style={{ fontStyle: 'italic', color: 'var(--gold-300, #d4a557)' }}>Legacy</span>
           </h2>
-          <p style={{ color: '#888', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 3rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 3rem' }}>
             Book a private consultation to discuss your vision, aesthetic, and how we can bring it to life.
           </p>
           <Link to="/contact" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: '#fff', color: '#000',
+            display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'var(--text-primary)', color: 'var(--color-bg)',
             padding: '1.2rem 3rem', borderRadius: '3rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none',
             transition: 'transform 0.3s ease'
           }}

@@ -55,7 +55,7 @@ const AdminMessages = () => {
               <span style={{
                 marginLeft: 'var(--space-sm)',
                 background: 'var(--gradient-gold)',
-                color: '#0a0805',
+                color: 'var(--color-bg)',
                 borderRadius: 'var(--radius-full)',
                 fontSize: 'var(--text-xs)',
                 padding: '2px 8px',
