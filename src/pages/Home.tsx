@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Camera, Film, Star, Award, Users, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Camera, Film, Star, Award, Users, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import api, { getImageUrl } from '../api/client';
 
@@ -165,18 +165,40 @@ const Home = () => {
   const heroRef = useRef(null);
   const servicesSectionRef = useRef(null);
 
+  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('introPlayed'));
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    sessionStorage.setItem('introPlayed', 'true');
+  };
+
+  useEffect(() => {
+    if (showIntro) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [showIntro]);
+
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
+  const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '80%']);
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isServicesHovered, setIsServicesHovered] = useState(false);
 
   useEffect(() => {
+    if (isServicesHovered) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % services.length);
-    }, 3500); // Autoplay interval
+    }, 4000); // Autoplay interval
     return () => clearInterval(timer);
-  }, []);
+  }, [isServicesHovered]);
+
+  const handleNextService = () => setActiveIndex((prev) => (prev + 1) % services.length);
+  const handlePrevService = () => setActiveIndex((prev) => (prev - 1 + services.length) % services.length);
 
   const [albums, setAlbums] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
@@ -253,13 +275,71 @@ const Home = () => {
   return (
     <div style={{ background: 'var(--color-bg)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
 
+      {/* ==================== INTRO SPLASH ==================== */}
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9999, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}
+          >
+            <video 
+              src="https://res.cloudinary.com/dowsywzrx/video/upload/v1783755309/redangle_1_dkg3tr.mp4" 
+              autoPlay 
+              muted 
+              playsInline 
+              onEnded={handleIntroComplete}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+            {/* Intro Animated Text */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              style={{ position: 'absolute', zIndex: 10, textAlign: 'center', pointerEvents: 'none' }}
+            >
+              <h1 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3rem, 6vw, 6rem)', color: '#fff', letterSpacing: '0.1em', fontWeight: 300, margin: 0, textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+                RED-ANGLE
+              </h1>
+              <div style={{ textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.9rem', color: 'var(--gold-300, #d4a557)', marginTop: '1rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+                Cinematic Masterpieces
+              </div>
+            </motion.div>
+            <button 
+              onClick={handleIntroComplete}
+              style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'rgba(0,0,0,0.5)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '0.5rem 1.5rem', borderRadius: '2rem', cursor: 'pointer', zIndex: 50, textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.7rem' }}
+            >
+              Skip Intro
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ==================== HERO ==================== */}
       <section ref={heroRef} style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        <motion.div style={{ position: 'absolute', inset: 0, y: heroY, background: 'var(--color-bg)' }}>
-          {/* Background removed as requested */}
+        <motion.div style={{ position: 'absolute', inset: 0, y: heroY, background: '#000' }}>
+          {heroImages.map((src, index) => (
+            <motion.div
+              key={src}
+              initial={false}
+              animate={{ opacity: currentBg === index ? 1 : 0, scale: currentBg === index ? 1 : 1.05 }}
+              transition={{ duration: 2.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{
+                position: 'absolute', inset: 0,
+                backgroundImage: `url("${src}")`,
+                backgroundSize: 'cover', backgroundPosition: 'center',
+                zIndex: currentBg === index ? 1 : 0
+              }}
+            />
+          ))}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)', zIndex: 2 }} />
         </motion.div>
 
-        <motion.div style={{ opacity: heroOpacity, position: 'relative', zIndex: 10, width: '100%', padding: '0 5%' }}>
+        <motion.div style={{ opacity: heroOpacity, y: heroTextY, position: 'relative', zIndex: 10, width: '100%', padding: '0 5%' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }}>
               <div style={{ textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.85rem', color: 'var(--gold-300, #d4a557)', marginBottom: '1.5rem' }}>
@@ -273,18 +353,23 @@ const Home = () => {
                 Where every frame is a masterpiece. Professional curation of light, shadow, and your most intimate moments.
               </p>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                <Link to="/portfolio" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--gold-300, #d4a557)', color: '#fff',
-                  padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none'
-                }}>
-                  View Portfolio <ArrowRight size={16} />
-                </Link>
-                <Link to="/contact" style={{
-                  display: 'inline-flex', alignItems: 'center', color: 'var(--text-primary)', border: '1px solid rgba(0,0,0,0.3)',
-                  padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none'
-                }}>
-                  Book Session
-                </Link>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link to="/portfolio" style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--gold-300, #d4a557)', color: '#fff',
+                    padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none',
+                    boxShadow: '0 10px 30px rgba(212,165,87,0.3)'
+                  }}>
+                    View Portfolio <ArrowRight size={16} />
+                  </Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link to="/contact" style={{
+                    display: 'inline-flex', alignItems: 'center', color: 'var(--text-primary)', border: '1px solid rgba(0,0,0,0.3)',
+                    padding: '1rem 2rem', borderRadius: '2rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.8rem', textDecoration: 'none'
+                  }}>
+                    Book Session
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -342,12 +427,21 @@ const Home = () => {
 
       {/* ==================== STATS ==================== */}
       <section style={{ padding: '5rem 5%', background: 'var(--color-surface)', borderTop: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
-          <CounterStat end={500} suffix="+" label="Weddings" />
-          <CounterStat end={2000} suffix="+" label="Clients" />
-          <CounterStat end={50} suffix="K+" label="Frames Delivered" />
-          <CounterStat end={15} label="Awards" />
-        </div>
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+          }}
+          style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}
+        >
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}><CounterStat end={500} suffix="+" label="Weddings" /></motion.div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}><CounterStat end={2000} suffix="+" label="Clients" /></motion.div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}><CounterStat end={50} suffix="K+" label="Frames Delivered" /></motion.div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}><CounterStat end={15} label="Awards" /></motion.div>
+        </motion.div>
       </section>
 
       {/* ==================== SERVICES (CARD SWAP STACK) ==================== */}
@@ -394,9 +488,22 @@ const Home = () => {
                     0{services.length}
                   </div>
                 </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
+                  <button onClick={handlePrevService} style={{ background: 'transparent', border: '1px solid rgba(212,165,87,0.3)', color: 'var(--gold-300, #d4a557)', padding: '0.8rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onMouseOver={e => e.currentTarget.style.background='rgba(212,165,87,0.1)'} onMouseOut={e => e.currentTarget.style.background='transparent'}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button onClick={handleNextService} style={{ background: 'transparent', border: '1px solid rgba(212,165,87,0.3)', color: 'var(--gold-300, #d4a557)', padding: '0.8rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onMouseOver={e => e.currentTarget.style.background='rgba(212,165,87,0.1)'} onMouseOut={e => e.currentTarget.style.background='transparent'}>
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
               </div>
 
-              <div style={{ position: 'relative', height: '650px', width: '100%', perspective: '1200px' }}>
+              <div 
+                style={{ position: 'relative', height: '650px', width: '100%', perspective: '1200px' }}
+                onMouseEnter={() => setIsServicesHovered(true)}
+                onMouseLeave={() => setIsServicesHovered(false)}
+              >
                 {services.map((service, index) => (
                   <StackedCard
                     key={service.num}
@@ -458,6 +565,8 @@ const Home = () => {
                       .album-link-${album.id}:hover .album-card-${album.id} { transform: scale(1.05); }
                       .album-overlay-${album.id} { background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%); opacity: 0.8; transition: opacity 0.4s ease; }
                       .album-link-${album.id}:hover .album-overlay-${album.id} { opacity: 1; }
+                      .album-text-${album.id} { transition: transform 0.4s ease, opacity 0.4s ease; transform: translateY(10px); opacity: 0.8; }
+                      .album-link-${album.id}:hover .album-text-${album.id} { transform: translateY(0); opacity: 1; }
                     `}</style>
 
                     <div className={`album-link-${album.id}`} style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -477,7 +586,7 @@ const Home = () => {
                         </span>
                       </div>
 
-                      <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem' }}>
+                      <div className={`album-text-${album.id}`} style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem' }}>
                         <h3 style={{ color: '#ffffff', fontSize: '1.5rem', fontFamily: 'var(--font-heading, serif)', marginBottom: '0.5rem', fontWeight: 400 }}>{album.title}</h3>
                         <p style={{ color: 'var(--gold-300, #d4a557)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
                           {album._count?.images || 0} Captures
@@ -533,16 +642,15 @@ const Home = () => {
           <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 3rem' }}>
             Book a private consultation to discuss your vision, aesthetic, and how we can bring it to life.
           </p>
-          <Link to="/contact" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'var(--text-primary)', color: 'var(--color-bg)',
-            padding: '1.2rem 3rem', borderRadius: '3rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none',
-            transition: 'transform 0.3s ease'
-          }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-          >
-            Inquire Now <ArrowRight size={18} />
-          </Link>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ display: 'inline-block' }}>
+            <Link to="/contact" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'var(--text-primary)', color: 'var(--color-bg)',
+              padding: '1.2rem 3rem', borderRadius: '3rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+            }}>
+              Inquire Now <ArrowRight size={18} />
+            </Link>
+          </motion.div>
         </motion.div>
       </section>
     </div>
