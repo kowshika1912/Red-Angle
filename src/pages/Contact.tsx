@@ -91,7 +91,8 @@ const Contact = () => {
         marginTop: '90px', // Push below fixed navbar
         paddingBottom: '6rem', 
         textAlign: 'center', 
-        paddingX: '1rem',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${heroBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
