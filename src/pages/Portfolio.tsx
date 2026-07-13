@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight, Camera, Sparkles } from 'lucide-react';
 import api, { getImageUrl } from '../api/client';
 import { Album, Image } from '../types';
-
+import DomeGallery from '../components/DomeGallery';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -243,8 +243,8 @@ const Portfolio = () => {
         className="section"
         style={{ paddingTop: '2rem', paddingBottom: '4rem', scrollMarginTop: '2rem' }}
       >
+        {/* Category Filters */}
         <div className="container">
-          {/* Category Filters */}
           <div className="filter-tabs" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}>
             {categories.map((cat) => (
               <button
@@ -265,119 +265,58 @@ const Portfolio = () => {
               </button>
             ))}
           </div>
-
-          {/* Albums Content / Loader */}
-          {loading ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', overflow: 'hidden', padding: '3rem 0' }}>
-              {Array.from({ length: 5 }).map((_, i) => {
-                let scale = 1;
-                let opacity = 1;
-                if (i !== 2) { scale = 0.8; opacity = 0.5; }
-                if (i === 0 || i === 4) { scale = 0.6; opacity = 0.2; }
-                return (
-                  <div key={i} className="card" style={{ width: '320px', height: '480px', background: '#fafafa', borderRadius: '24px', overflow: 'hidden', opacity, transform: `scale(${scale})`, transition: 'all 0.3s', flexShrink: 0 }}>
-                    <div className="skeleton" style={{ height: '100%', backgroundColor: '#eee' }} />
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                style={{ width: '100%', overflow: 'hidden' }}
-              >
-                {albums.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '4rem' }}>
-                    <Camera size={60} color="#cccccc" style={{ margin: '0 auto' }} />
-                    <p style={{ color: '#999999', marginTop: '1rem' }}>No albums found in this category yet.</p>
-                  </div>
-                ) : (
-                  <Swiper
-                    effect={'coverflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    slidesPerView={'auto'}
-                    loop={true}
-                    autoplay={{
-                      delay: 2500,
-                      disableOnInteraction: false,
-                    }}
-                    coverflowEffect={{
-                      rotate: 0,
-                      stretch: 60,
-                      depth: 150,
-                      modifier: 1.5,
-                      slideShadows: true,
-                    }}
-                    pagination={{ clickable: true, dynamicBullets: true }}
-                    modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-                    className="portfolio-swiper"
-                    style={{ padding: '4rem 0', width: '100%' }}
-                  >
-                    {[...albums, ...albums, ...albums].map((album, index) => (
-                      <SwiperSlide key={`${album.id}-${index}`} style={{ width: '300px', height: '460px', borderRadius: '24px', overflow: 'hidden' }}>
-                        <div
-                          className="glass-card"
-                          onClick={() => openAlbum(album)}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            position: 'relative',
-                            borderRadius: '24px',
-                            overflow: 'hidden',
-                            cursor: 'pointer',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                          }}
-                        >
-                          {album.coverImage ? (
-                            <img src={getImageUrl(album.coverImage)} alt={album.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          ) : (
-                            <img src={`https://picsum.photos/seed/${album.id}/800/1000`} alt={album.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          )}
-
-                          <div style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%)',
-                            padding: '3rem 1.5rem 1.5rem',
-                            color: 'white',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                            height: '60%',
-                          }}>
-                            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 600, color: '#ffffff', textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>{album.title}</h3>
-                            {album.description && (
-                              <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem', lineHeight: '1.5', color: '#ffffff', opacity: 0.95, textShadow: '0 1px 4px rgba(0,0,0,0.8)', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                {album.description}
-                              </p>
-                            )}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                              <p style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.8)' }}>
-                                {album.category.replace('_', ' ')}
-                              </p>
-                              <span style={{ background: 'rgba(255,255,255,0.2)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 500, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                                {album._count?.images || 12} photos
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          )}
         </div>
+
+        {/* Albums Content / Loader — full width, outside container */}
+        {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', overflow: 'hidden', padding: '3rem 0' }}>
+            {Array.from({ length: 5 }).map((_, i) => {
+              let scale = 1;
+              let opacity = 1;
+              if (i !== 2) { scale = 0.8; opacity = 0.5; }
+              if (i === 0 || i === 4) { scale = 0.6; opacity = 0.2; }
+              return (
+                <div key={i} className="card" style={{ width: '320px', height: '480px', background: '#fafafa', borderRadius: '24px', overflow: 'hidden', opacity, transform: `scale(${scale})`, transition: 'all 0.3s', flexShrink: 0 }}>
+                  <div className="skeleton" style={{ height: '100%', backgroundColor: '#eee' }} />
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{ width: '100%' }}
+            >
+              {albums.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '4rem' }}>
+                  <Camera size={60} color="#cccccc" style={{ margin: '0 auto' }} />
+                  <p style={{ color: '#999999', marginTop: '1rem' }}>No albums found in this category yet.</p>
+                </div>
+              ) : (
+                <div style={{ width: '100%', height: '80vh' }}>
+                  <DomeGallery 
+                    images={albums.map(album => ({ 
+                      src: album.coverImage ? getImageUrl(album.coverImage) : `https://picsum.photos/seed/${album.id}/800/1000`, 
+                      alt: album.title 
+                    }))} 
+                    fit={0.5}
+                    maxVerticalRotationDeg={12}
+                    segments={32}
+                    dragDampening={2.2}
+                    grayscale={false}
+                    overlayBlurColor="transparent"
+                  />
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        )}
       </section>
+
 
       {/* Album Modal Detail Overlay */}
       <AnimatePresence>
