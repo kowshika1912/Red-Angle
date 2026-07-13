@@ -15,9 +15,9 @@ import img7 from '../assets/Tamil Wedding in London.jpg';
 const packageCategories = ['All', 'WEDDING', 'MATERNITY', 'FASHION', 'CORPORATE', 'COMMERCIAL'];
 
 // Smooth, cinematic fade-up animation
-const fadeUp = {
+const fadeUp: any = {
   hidden: { opacity: 0, y: 50 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
