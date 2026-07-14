@@ -178,7 +178,7 @@ const Packages = () => {
                       }}
                       onClick={() => setEnquiryPkg(pkg)}
                       onMouseEnter={(e) => {
-                        if (!pkg.isPopular) e.currentTarget.style.backgroundColor = 'rgba(212, 165, 87, 0.1)';
+                        if (!pkg.isPopular) e.currentTarget.style.backgroundColor = 'rgba(197, 168, 128, 0.1)';
                       }}
                       onMouseLeave={(e) => {
                         if (!pkg.isPopular) e.currentTarget.style.backgroundColor = 'transparent';
@@ -199,7 +199,7 @@ const Packages = () => {
             transition={{ duration: 0.8 }}
             style={{
               marginTop: '5rem',
-              background: 'linear-gradient(135deg, var(--color-surface), rgba(212,165,87,0.08))',
+              background: 'linear-gradient(135deg, var(--color-surface), rgba(197, 168, 128, 0.08))',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-xl)',
               padding: '4rem 2rem',

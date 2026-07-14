@@ -87,8 +87,8 @@ const Contact = () => {
       
       {/* Top Section */}
       <section style={{ 
-        paddingTop: '6rem', 
-        marginTop: '90px', // Push below fixed navbar
+        paddingTop: '9rem', 
+        marginTop: '0', 
         paddingBottom: '6rem', 
         textAlign: 'center', 
         paddingLeft: '1rem',
@@ -286,8 +286,8 @@ const Contact = () => {
                     opacity: loading ? 0.8 : 1,
                     display: 'inline-block'
                   }}
-                  onMouseOver={e => { if(!loading) e.currentTarget.style.backgroundColor = 'var(--gold-400)' }}
-                  onMouseOut={e => { if(!loading) e.currentTarget.style.backgroundColor = 'var(--gold-300)' }}
+                  onMouseOver={e => { if(!loading) e.currentTarget.style.opacity = '0.9' }}
+                  onMouseOut={e => { if(!loading) e.currentTarget.style.opacity = '1' }}
                 >
                   {loading ? 'Sending...' : 'Send Message'}
                 </button>
