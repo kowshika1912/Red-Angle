@@ -1,529 +1,290 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Award, Camera, Heart, Users, ArrowRight, Star, Sparkles } from 'lucide-react';
-
-const timelineEvents = [
-  { year: '2013', title: 'The Inception', desc: 'Started with a passion for capturing authentic moments and a single camera.' },
-  { year: '2015', title: 'First Grand Canvas', desc: 'Photographed our first grand wedding, setting the standard for our signature style.' },
-  { year: '2017', title: 'Studio Expansion', desc: 'Moved to our dedicated studio space and expanded our team of talented photographers.' },
-  { year: '2019', title: 'Crowned Best', desc: 'Received the "Best Wedding Photographer" award from the India Photography Association.' },
-  { year: '2021', title: 'Cinematic Skies', desc: 'Expanded services to include cinematic videography and drone coverage.' },
-  { year: '2024', title: '500+ Masterpieces', desc: 'Celebrated a milestone of over 500 weddings captured across India.' },
-];
-
-const team = [
-  { name: 'Rahul Verma', role: 'Lead & Founder', specialty: 'Wedding & Portrait', quote: "Light is my language." },
-  { name: 'Priya Sharma', role: 'Senior Artist', specialty: 'Fashion & Editorial', quote: "Elegance in every frame." },
-  { name: 'Arjun Patel', role: 'Cinematographer', specialty: 'Cinematography & Drone', quote: "Motion tells the truth." },
-  { name: 'Meena Kapoor', role: 'Master Retoucher', specialty: 'Color Grading', quote: "Perfecting the mood." },
-];
-
-// Premium fluid easing curves
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Play, Copy } from 'lucide-react';
 const customEasing: [number, number, number, number] = [0.6, 0.01, -0.05, 0.95];
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
-  }
-};
+const categories = [
+  { id: '01', title: 'PRE WEDDING', image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1600&auto=format&fit=crop' },
+  { id: '02', title: 'POST WEDDING', image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1600&auto=format&fit=crop' },
+  { id: '03', title: 'MATERNITY', image: 'https://images.unsplash.com/photo-1557002664-c2406afad222?q=80&w=1600&auto=format&fit=crop' },
+  { id: '04', title: 'FASHION', image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1600&auto=format&fit=crop' }
+];
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1, ease: customEasing }
-  }
-};
+const testimonials = [
+  { quote: "Little things matter, and that's what makes Red-Angle stand out. While delivering our wedding film, they ensured we were with our family watching it, with Sajith joining us via video call to capture our raw reactions. The wedding film exceeded our expectations—it not only took us back to that special day but also made us connect to it on a deeper level. A 10-minute video never made us feel so emotional! The filmography, screenplay, and editing were all executed beautifully.", author: "SAHAANA & THAMIZH" },
+  { quote: "Red-Angle brought our vision to life. The attention to detail and the way they captured every fleeting emotion was truly magical. We couldn't have asked for a better team to document our special day.", author: "ANJALI & RAHUL" },
+  { quote: "Beyond just taking photos, they tell a story. Every frame is a piece of art that we will cherish forever. The passion they bring to their work reflects beautifully in the final results.", author: "PRIYA & KARTHIK" }
+];
 
-const textRevealVariants: Variants = {
-  hidden: { opacity: 0, y: "100%" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.2, ease: customEasing }
-  }
-};
-
-// Team Card Animation Variants
-const cardOverlayVariants: Variants = {
-  rest: { opacity: 0, y: 30 },
-  hover: { opacity: 1, y: 0, transition: { duration: 0.5, ease: customEasing } }
-};
-
-const cardContentVariants: Variants = {
-  rest: { opacity: 1, y: 0 },
-  hover: { opacity: 0, y: -20, transition: { duration: 0.4, ease: customEasing } }
-};
+const instagramPosts = [
+  { id: 1, type: 'video', image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop' },
+  { id: 2, type: 'carousel', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop' },
+  { id: 3, type: 'carousel', image: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=600&auto=format&fit=crop' },
+  { id: 4, type: 'carousel', image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=600&auto=format&fit=crop' },
+  { id: 5, type: 'carousel', image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=600&auto=format&fit=crop' },
+  { id: 6, type: 'carousel', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600&auto=format&fit=crop' },
+  { id: 7, type: 'carousel', image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600&auto=format&fit=crop' },
+  { id: 8, type: 'photo', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop' },
+];
 
 const About = () => {
-  const containerRef = useRef(null);
-  const timelineRef = useRef(null);
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-  // Overall page scroll with smooth spring physics
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const smoothY = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
-  const heroY = useTransform(smoothY, [0, 1], ["0%", "40%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const heroScale = useTransform(smoothY, [0, 0.3], [1, 0.95]);
-
-  // Timeline specific scroll
-  const { scrollYProgress: timelineScroll } = useScroll({
-    target: timelineRef,
-    offset: ["start center", "end center"]
-  });
-  const smoothTimelineScroll = useSpring(timelineScroll, { stiffness: 70, damping: 25 });
+  const nextTestimonial = () => setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  const prevTestimonial = () => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <div className="page-enter" ref={containerRef} style={{ background: '#ffffff', color: '#111111', overflow: 'hidden', position: 'relative' }}>
-
-      {/* Cinematic Animated Ambient Background - Adapted for Light Theme */}
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
-        background: 'radial-gradient(circle at 50% 0%, rgba(212,165,87,0.12) 0%, transparent 60%)'
-      }} />
-
-      {/* Floating Light Dust Particles */}
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          animate={{
-            y: [0, -40, 0],
-            x: [0, i % 2 === 0 ? 30 : -30, 0],
-            opacity: [0.2, 0.6, 0.2],
-            scale: [1, 1.5, 1]
-          }}
-          transition={{
-            duration: 8 + i * 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.5
-          }}
-          style={{
-            position: 'absolute',
-            top: `${20 + i * 15}%`,
-            left: `${10 + i * 15}%`,
-            width: Math.random() * 4 + 2,
-            height: Math.random() * 4 + 2,
-            borderRadius: '50%',
-            backgroundColor: '#d4a557',
-            filter: 'blur(1px)',
-            zIndex: 0
-          }}
-        />
-      ))}
-
-      {/* Cinematic Hero */}
-      <section style={{ position: 'relative', paddingTop: '15rem', paddingBottom: '6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, minHeight: '90vh' }}>
-        <motion.div style={{ y: heroY, opacity: heroOpacity, scale: heroScale, textAlign: 'center', width: '100%', padding: '0 2rem' }}>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+    <div className="page-enter" style={{ overflow: 'hidden' }}>
+      {/* Meet Our Founders Section */}
+      <section style={{ position: 'relative', width: '100%', padding: '0', background: '#000000', color: '#ffffff', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          
+          {/* Left Founder Image (Sarav) */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5 }}
+            style={{ flex: '1', position: 'relative', minHeight: '600px', minWidth: '300px' }}
           >
-            <motion.div variants={itemVariants} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
-              <Sparkles size={16} color="#d4a557" />
-              <span style={{
-                textTransform: 'uppercase',
-                letterSpacing: '0.5em',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: '#d4a557',
-              }}>
-                The Red-Angle Story
-              </span>
-              <Sparkles size={16} color="#d4a557" />
-            </motion.div>
-
-            {/* Premium Staggered Text Reveal */}
-            <div style={{ overflow: 'hidden', paddingBottom: '1rem' }}>
-              <motion.h1
-                variants={textRevealVariants}
-                style={{
-                  fontFamily: 'var(--font-heading, serif)',
-                  fontSize: 'clamp(3.5rem, 8vw, 8rem)',
-                  lineHeight: 1,
-                  margin: 0,
-                  color: '#111111',
-                }}
-              >
-                Capturing
-              </motion.h1>
-            </div>
-            <div style={{ overflow: 'hidden' }}>
-              <motion.h1
-                variants={textRevealVariants}
-                style={{
-                  fontFamily: 'var(--font-heading, serif)',
-                  fontSize: 'clamp(3.5rem, 8vw, 8rem)',
-                  lineHeight: 1,
-                  margin: 0,
-                  background: 'linear-gradient(180deg, #111111 0%, rgba(17,17,17,0.4) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                <span style={{
-                  // Updated to an elegant italic serif to match the image provided
-                  fontFamily: "'Playfair Display', 'Cormorant Garamond', 'Bodoni MT', 'Didot', serif",
-                  fontStyle: 'italic',
-                  fontWeight: 400,
-                  paddingRight: '0.5rem',
-                  color: '#d4a557',
-                  WebkitTextFillColor: '#d4a557'
-                }}>The</span> Ethereal.
-              </motion.h1>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          animate={{ y: [0, 20, 0], opacity: [0.3, 1, 0.3] }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          style={{ position: 'absolute', bottom: '4rem', left: '50%', transform: 'translateX(-50%)' }}
-        >
-          <div style={{ width: '2px', height: '60px', background: 'linear-gradient(to bottom, #d4a557, transparent)' }} />
-        </motion.div>
-      </section>
-
-      {/* Avant-Garde Mission Section */}
-      <section style={{ position: 'relative', zIndex: 2, padding: '8rem 2rem', background: 'rgba(250, 250, 250, 0.6)', backdropFilter: 'blur(20px)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '4rem', alignItems: 'center' }}>
-
-          {/* Left Column: Parallax Floating Graphic */}
-          <motion.div
-            style={{ gridColumn: '1 / 6', position: 'relative' }}
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: customEasing }}
-          >
-            <motion.div
-              animate={{ y: [-15, 15, -15], rotateZ: [-1, 1, -1] }}
-              transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-              style={{
-                aspectRatio: '3/4',
-                borderRadius: '2rem 0 2rem 0',
-                background: 'linear-gradient(135deg, rgba(212,165,87,0.1), rgba(0,0,0,0.02))',
-                border: '1px solid rgba(212,165,87,0.2)',
-                backdropFilter: 'blur(20px)',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              {/* Spinning Glow */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-                style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, transparent 0 280deg, rgba(212,165,87,0.2) 360deg)', borderRadius: '50%' }}
-              />
-              <div style={{ position: 'absolute', inset: '2px', background: '#ffffff', borderRadius: '2rem 0 2rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 10 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                >
-                  <Camera size={72} color="#d4a557" strokeWidth={1} />
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Column: Editorial Text */}
-          <motion.div
-            style={{ gridColumn: '7 / 13' }}
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <motion.h2 variants={itemVariants} style={{
-              fontFamily: 'var(--font-heading, serif)',
-              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
-              lineHeight: 1.1,
-              marginBottom: '2rem',
-              color: '#111111'
-            }}>
-              More than images.<br />
-              <span style={{
-                color: '#d4a557',
-                fontFamily: "'Playfair Display', 'Cormorant Garamond', 'Bodoni MT', 'Didot', serif",
-                fontStyle: 'italic',
-                fontWeight: 400
-              }}>We craft legacies.</span>
-            </motion.h2>
-            <motion.p variants={itemVariants} style={{ fontSize: '1.25rem', color: 'rgba(0,0,0,0.7)', lineHeight: 1.8, marginBottom: '3rem', maxWidth: '600px', fontWeight: 400 }}>
-              Since 2013, Red-Angle Studio has evolved into a sanctuary for visual storytelling. We don't just document; we distill the raw, ephemeral emotions of your most significant moments into timeless art.
-            </motion.p>
-
-            {/* Premium Light Stats Grid */}
-            <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-              {[
-                { icon: <Award size={28} />, label: '10+ Years', sub: 'Of Mastery' },
-                { icon: <Heart size={28} />, label: '500+', sub: 'Weddings' },
-                { icon: <Star size={28} />, label: '15 Awards', sub: 'Excellence' },
-                { icon: <Users size={28} />, label: '2000+', sub: 'Clients' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{ y: -5, scale: 1.02, backgroundColor: 'rgba(212,165,87,0.05)', borderColor: 'rgba(212,165,87,0.3)' }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  style={{
-                    padding: '2rem 1.5rem',
-                    background: '#ffffff',
-                    border: '1px solid rgba(0,0,0,0.06)',
-                    borderRadius: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1.2rem',
-                    cursor: 'default',
-                    boxShadow: '0 10px 30px -10px rgba(0,0,0,0.05)'
-                  }}
-                >
-                  <div style={{ color: '#d4a557', padding: '0.8rem', background: 'rgba(212,165,87,0.1)', borderRadius: '50%' }}>
-                    {stat.icon}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 600, color: '#111111' }}>{stat.label}</div>
-                    <div style={{ fontSize: '0.8rem', color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '0.2rem', fontWeight: 500 }}>{stat.sub}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Cinematic Timeline */}
-      <section ref={timelineRef} style={{ position: 'relative', zIndex: 2, padding: '10rem 2rem 8rem', background: '#ffffff' }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 0 }}>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: customEasing }}
-              style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '4rem', marginBottom: '3rem', color: '#111111' }}
-            >
-              The Evolution
-            </motion.h2>
-
-            <motion.div
-              animate={{ boxShadow: ['0 0 0px rgba(212,165,87,0)', '0 0 30px rgba(212,165,87,0.2)', '0 0 0px rgba(212,165,87,0)'] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              style={{
-                display: 'inline-flex',
-                padding: '1.2rem',
-                background: 'linear-gradient(135deg, rgba(212,165,87,0.1) 0%, rgba(212,165,87,0.02) 100%)',
-                borderRadius: '50%',
-                border: '1px solid rgba(212,165,87,0.3)',
-                position: 'relative',
-                zIndex: 3,
-              }}
-            >
-              <Camera size={36} color="#d4a557" strokeWidth={1.5} />
-            </motion.div>
-
-            {/* Bridge Line */}
-            <div style={{ width: '2px', height: '6rem', background: 'linear-gradient(to bottom, #d4a557, rgba(0,0,0,0.05))', margin: '0 auto', position: 'relative', zIndex: 2 }} />
-          </div>
-
-          <div style={{ position: 'relative' }}>
-            {/* Scroll-Drawn Center Timeline Line */}
-            <div style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', width: '2px', background: 'rgba(0,0,0,0.05)', transform: 'translateX(-50%)', zIndex: 1 }} />
-
-            {/* Animated Gold Fill */}
-            <motion.div
-              style={{
-                position: 'absolute', top: 0, bottom: 0, left: '50%', width: '2px',
-                background: 'linear-gradient(180deg, #d4a557 0%, #d4a557 80%, transparent 100%)',
-                transformOrigin: 'top',
-                scaleY: smoothTimelineScroll,
-                x: '-50%',
-                zIndex: 2,
-              }}
+            <img 
+              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop" 
+              alt="Sarav" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%) contrast(1.1) brightness(0.7)' }} 
             />
+            {/* Fade into black */}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, transparent 50%, #000000 100%), linear-gradient(to bottom, transparent 80%, #000000 100%), linear-gradient(to top, transparent 80%, #000000 100%)' }} />
+          </motion.div>
 
-            {timelineEvents.map((event, i) => {
-              const isEven = i % 2 === 0;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
-                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  viewport={{ once: true, margin: "-10%" }}
-                  transition={{ duration: 1, delay: 0.1, ease: customEasing }}
-                  style={{
-                    display: 'flex',
-                    flexDirection: isEven ? 'row' : 'row-reverse',
-                    alignItems: 'center',
-                    marginBottom: i === timelineEvents.length - 1 ? 0 : '10rem',
-                    gap: '4rem',
-                    position: 'relative'
-                  }}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    style={{ flex: 1, textAlign: isEven ? 'right' : 'left', background: 'rgba(0,0,0,0.01)', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(0,0,0,0.04)' }}
-                  >
-                    <h3 style={{ fontSize: '2.2rem', fontFamily: 'var(--font-heading, serif)', color: '#d4a557', marginBottom: '1rem' }}>{event.title}</h3>
-                    <p style={{ color: 'rgba(0,0,0,0.7)', lineHeight: 1.7, fontSize: '1.1rem', fontWeight: 400 }}>{event.desc}</p>
-                  </motion.div>
-
-                  {/* Glowing Pulse Node */}
-                  <div style={{ position: 'relative', zIndex: 3 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#ffffff', border: '2px solid #d4a557', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <motion.div
-                        animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", delay: i * 0.3 }}
-                        style={{ width: 10, height: 10, borderRadius: '50%', background: '#d4a557' }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ flex: 1, display: 'flex', justifyContent: isEven ? 'flex-start' : 'flex-end' }}>
-                    <motion.span
-                      whileHover={{ color: 'rgba(212,165,87,0.15)', scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      style={{ fontSize: '7rem', fontWeight: 900, color: 'rgba(0,0,0,0.03)', letterSpacing: '-0.05em', cursor: 'default' }}>
-                      {event.year}
-                    </motion.span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial Team Roster */}
-      <section style={{ padding: '6rem 2rem 8rem', background: '#fafafa', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <motion.div
+          {/* Center Text */}
+          <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: customEasing }}
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', flexWrap: 'wrap', gap: '2rem' }}
+            style={{ flex: '1.2', textAlign: 'center', padding: '4rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: '350px', maxWidth: '600px', margin: '0 auto', zIndex: 3 }}
           >
-            <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3.5rem, 6vw, 5.5rem)', margin: 0, color: '#111111' }}>The Artisans</h2>
-            <p style={{ color: 'rgba(0,0,0,0.6)', maxWidth: 300, textAlign: 'right', fontSize: '1.1rem', fontWeight: 500 }}>Masters of light, shadow, and visual narrative.</p>
+            <h4 style={{ color: '#E50914', fontSize: '1.8rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: 'var(--font-heading, serif)' }}>
+              MEET
+            </h4>
+            <h2 style={{ fontSize: '3.5rem', fontFamily: 'var(--font-heading, serif)', marginBottom: '3rem', fontWeight: 400 }}>
+              Our Founders
+            </h2>
+            <p style={{ fontSize: '1.05rem', lineHeight: 1.9, color: 'rgba(255,255,255,0.9)', marginBottom: '2rem', fontWeight: 300, fontFamily: 'var(--font-body, sans-serif)' }}>
+              As the creative visionaries behind Red-Angle Studios, we started this journey with a simple mission: to craft visual masterpieces that capture the raw, unscripted emotions of your special day. With a combined experience of over a decade in cinematic wedding photography, our team has documented hundreds of unique love stories across the globe.
+            </p>
+            <p style={{ fontSize: '1.05rem', lineHeight: 1.9, color: 'rgba(255,255,255,0.9)', fontWeight: 300, fontFamily: 'var(--font-body, sans-serif)' }}>
+              We believe that every couple has a distinct narrative, and our passion is to tell that story through breathtaking imagery and artful composition. From candid smiles to the grandest celebrations, Red-Angle Studios is dedicated to turning your fleeting moments into timeless, cinematic memories that you will cherish for a lifetime.
+            </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
-            {team.map((member, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.15, ease: customEasing }}
-                whileHover="hover"
-                animate="rest"
-                style={{
-                  position: 'relative',
-                  height: '420px',
-                  background: '#ffffff',
-                  borderRadius: '1.5rem',
-                  overflow: 'hidden',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                  cursor: 'pointer',
-                  boxShadow: '0 10px 30px -15px rgba(0,0,0,0.05)'
-                }}
-              >
-                {/* Framer Motion Pure Hover Effects */}
-                <motion.div
-                  variants={{ hover: { borderColor: 'rgba(212,165,87,0.8)', boxShadow: '0 20px 40px rgba(212,165,87,0.15)' } }}
-                  style={{ position: 'absolute', inset: 0, borderRadius: '1.5rem', border: '1px solid transparent', zIndex: 1, transition: 'all 0.4s' }}
-                />
+          {/* Right Founder Image (Sajith) */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5 }}
+            style={{ flex: '1', position: 'relative', minHeight: '600px', minWidth: '300px' }}
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" 
+              alt="Sajith" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%) contrast(1.1) brightness(0.7)' }} 
+            />
+            {/* Fade into black */}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, transparent 50%, #000000 100%), linear-gradient(to bottom, transparent 80%, #000000 100%), linear-gradient(to top, transparent 80%, #000000 100%)' }} />
+          </motion.div>
 
-                <div style={{ padding: '3rem 2.5rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-                  <motion.div variants={cardContentVariants}>
-                    <div style={{ color: '#d4a557', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', fontWeight: 700 }}>
-                      {member.role}
-                    </div>
-                    <h3 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-heading, serif)', margin: 0, color: '#111111' }}>{member.name}</h3>
-                  </motion.div>
-
-                  {/* Bright Gold Overlay on Hover */}
-                  <motion.div variants={cardOverlayVariants} style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(212,165,87,0.98), rgba(212,165,87,0.9))',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
-                    padding: '2.5rem', textAlign: 'center'
-                  }}>
-                    <p style={{ fontStyle: 'italic', fontSize: '1.3rem', color: '#ffffff', marginBottom: '1.5rem', fontWeight: 500 }}>"{member.quote}"</p>
-                    <div style={{ width: '40px', height: '2px', background: '#ffffff', marginBottom: '1.5rem' }} />
-                    <p style={{ fontSize: '0.85rem', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 700 }}>{member.specialty}</p>
-                  </motion.div>
-
-                  <div style={{ alignSelf: 'flex-end', opacity: 0.04, fontSize: '8rem', fontFamily: 'var(--font-heading, serif)', lineHeight: 0.8, pointerEvents: 'none', color: '#111111' }}>
-                    {member.name.charAt(0)}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* Premium CTA */}
-      <section style={{ padding: '8rem 2rem', textAlign: 'center', position: 'relative', background: '#ffffff', overflow: 'hidden' }}>
+      {/* Vision, Mission, Achievements Section */}
+      <section style={{ background: '#ffffff', color: '#333333', padding: '6rem 2rem' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem' }}>
+          
+          {/* Vision */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: customEasing }}>
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop" alt="Vision" style={{ width: '100%', height: '350px', objectFit: 'cover', filter: 'grayscale(100%)', marginBottom: '2rem' }} />
+            <h3 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.4rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem', color: '#222222', fontWeight: 400 }}>Vision</h3>
+            <p style={{ fontSize: '1rem', lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', fontWeight: 400 }}>
+              Our vision is to be a premier destination for couples seeking authentic and beautiful documentary wedding photography, to creating visually stunning and emotionally evocative films that capture the essence of love and commitment.
+            </p>
+          </motion.div>
 
-        {/* Animated Gradient Sweep */}
-        <motion.div
-          animate={{ x: ['-100%', '100%'] }}
-          transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
-          style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-            background: 'linear-gradient(90deg, transparent, #d4a557, transparent)',
-            opacity: 0.8
-          }}
-        />
+          {/* Mission */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2, ease: customEasing }}>
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Mission" style={{ width: '100%', height: '350px', objectFit: 'cover', filter: 'grayscale(100%)', marginBottom: '2rem' }} />
+            <h3 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.4rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem', color: '#222222', fontWeight: 400 }}>Mission</h3>
+            <p style={{ fontSize: '1rem', lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', fontWeight: 400 }}>
+              To provide our clients with an unparalleled photography experience that results in beautiful and timeless images that they will treasure for a lifetime. We strive to be creative, attentive, and professional in everything we do, and to consistently deliver exceptional quality and service to our clients. We are committed to capturing the beauty, emotion, and candid moments of each family celebrations we photograph, and to creating a lasting legacy of the celebrations.
+            </p>
+          </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: customEasing }}>
-          <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: 'clamp(3rem, 6vw, 5rem)', marginBottom: '1.5rem', color: '#111111' }}>
-            Ready to frame your story?
-          </h2>
-          <p style={{ color: 'rgba(0,0,0,0.6)', fontSize: '1.25rem', marginBottom: '4rem', maxWidth: 600, margin: '0 auto 4rem', fontWeight: 400 }}>
-            Let us curate your memories with the precision and artistry they deserve.
-          </p>
+          {/* Achievements */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.4, ease: customEasing }}>
+            <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=800&auto=format&fit=crop" alt="Achievements" style={{ width: '100%', height: '350px', objectFit: 'cover', filter: 'grayscale(100%)', marginBottom: '2rem' }} />
+            <h3 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.4rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem', color: '#222222', fontWeight: 400 }}>Achievements</h3>
+            <p style={{ fontSize: '1rem', lineHeight: 1.8, color: 'rgba(0,0,0,0.5)', fontWeight: 400 }}>
+              South India's Brand Ambassador of FujiFilm X-series camera. Won 2 Fearless awards in Collection 50, competing with top photographers around the world. Winner of "Behind the Scene" category - Canon Wedding photographer of the year 2017-18 by Better Photography Magazine. 9 Award nominations - Most nominated Wedding photography team in Sony Better Photography Wedding photographer of the year 2019-20.
+            </p>
+          </motion.div>
 
-          <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
-              <Link to="/contact" style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-                background: '#d4a557', color: '#ffffff',
-                padding: '1.2rem 3rem', borderRadius: '3rem',
-                fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.1em',
-                boxShadow: '0 15px 35px -10px rgba(212,165,87,0.6)',
-                position: 'relative', overflow: 'hidden'
-              }}>
-                Book a Consultation <ArrowRight size={20} />
-              </Link>
-            </motion.div>
+        </div>
+      </section>
 
-            <motion.div whileHover={{ scale: 1.05, backgroundColor: 'rgba(0,0,0,0.03)' }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
-              <Link to="/portfolio" style={{
-                display: 'inline-flex', alignItems: 'center',
-                color: '#111111', textDecoration: 'none',
-                padding: '1.2rem 3rem', borderRadius: '3rem',
-                border: '1px solid rgba(0,0,0,0.2)',
-                textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.9rem',
-                fontWeight: 600
-              }}>
-                Explore Portfolio
-              </Link>
-            </motion.div>
+      {/* Interactive Categories Gallery */}
+      <section style={{ display: 'flex', minHeight: '90vh', background: '#ffffff', width: '100%', overflow: 'hidden', flexWrap: 'wrap' }}>
+        {/* Sidebar */}
+        <div style={{ flex: '1', minWidth: '300px', maxWidth: '400px', padding: '4rem 6rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#ffffff', zIndex: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            {categories.map((cat, idx) => (
+              <div 
+                key={cat.id} 
+                onClick={() => setActiveCategory(idx)}
+                style={{ cursor: 'pointer', opacity: activeCategory === idx ? 1 : 0.4, transition: 'opacity 0.4s' }}
+              >
+                <div style={{ fontSize: '0.85rem', color: '#555', marginBottom: '0.8rem', letterSpacing: '0.2em', fontWeight: 500 }}>{cat.id}</div>
+                <div style={{ 
+                  fontFamily: 'var(--font-heading, serif)', 
+                  fontSize: '2.5rem', 
+                  letterSpacing: '0.2em', 
+                  color: '#111111',
+                  borderBottom: activeCategory === idx ? '1px solid rgba(0,0,0,0.3)' : '1px solid transparent',
+                  paddingBottom: '0.5rem',
+                  display: 'inline-block',
+                  transition: 'border-color 0.4s',
+                  lineHeight: 1.2
+                }}>
+                  {cat.title.split(' ').map((word, i) => (
+                    <React.Fragment key={i}>
+                      {word}<br/>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        </motion.div>
+        </div>
+
+        {/* Main Image View */}
+        <div style={{ flex: '2', minWidth: '500px', position: 'relative' }}>
+          <AnimatePresence mode="wait">
+            <motion.img 
+              key={activeCategory}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: customEasing }}
+              src={categories[activeCategory].image} 
+              alt={categories[activeCategory].title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
+            />
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Testimonial Section */}
+      <section style={{ background: '#ffffff', color: '#111111', padding: '8rem 2rem 2rem', textAlign: 'center', position: 'relative' }}>
+        <div style={{ width: '1px', height: '80px', background: 'rgba(0,0,0,0.2)', margin: '0 auto 4rem' }}></div>
+        
+        <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.8rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '1rem', fontWeight: 400 }}>
+          What Our Client Says
+        </h2>
+        <p style={{ fontFamily: 'var(--font-heading, serif)', fontStyle: 'italic', color: 'rgba(0,0,0,0.5)', fontSize: '1.2rem', marginBottom: '5rem' }}>
+          At the end of the day, people won't remember what you said or did, they will remember how you made them feel.
+        </p>
+
+        <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={prevTestimonial} style={{ position: 'absolute', left: 0, padding: '1rem', cursor: 'pointer', opacity: 0.5 }}>
+            <ArrowLeft strokeWidth={1} size={40} />
+          </button>
+
+          <div style={{ overflow: 'hidden', padding: '0 5rem' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTestimonial}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: customEasing }}
+              >
+                <p style={{ fontFamily: 'var(--font-heading, serif)', fontStyle: 'italic', fontSize: '1.2rem', lineHeight: 2, color: 'rgba(0,0,0,0.6)', marginBottom: '3rem' }}>
+                  {testimonials[activeTestimonial].quote}
+                </p>
+                <div style={{ fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600, color: '#333' }}>
+                  {testimonials[activeTestimonial].author}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <button onClick={nextTestimonial} style={{ position: 'absolute', right: 0, padding: '1rem', cursor: 'pointer', opacity: 0.5 }}>
+            <ArrowRight strokeWidth={1} size={40} />
+          </button>
+        </div>
+
+        {/* Pagination Dots */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '4rem', marginBottom: '2rem' }}>
+          {testimonials.map((_, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => setActiveTestimonial(idx)}
+              style={{ 
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '30px', height: '30px',
+                borderRadius: '50%',
+                border: activeTestimonial === idx ? '1px solid rgba(0,0,0,0.3)' : '1px solid transparent',
+                transition: 'border-color 0.3s'
+              }}
+            >
+              <div style={{ 
+                width: '6px', height: '6px', 
+                background: 'rgba(0,0,0,0.4)', 
+                transform: 'rotate(45deg)',
+                opacity: activeTestimonial === idx ? 1 : 0.5
+              }}></div>
+            </div>
+          ))}
+        </div>
+
+      </section>
+
+      {/* Instagram Feed Section */}
+      <section style={{ background: '#ffffff', padding: '0 2rem 8rem', textAlign: 'center' }}>
+        <h3 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.4rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#111111', fontWeight: 400, marginBottom: '0.5rem' }}>
+          Follow Us On Instagram
+        </h3>
+        <p style={{ fontFamily: 'var(--font-heading, serif)', fontStyle: 'italic', color: 'rgba(0,0,0,0.5)', fontSize: '1.1rem', marginBottom: '4rem' }}>
+          @ RedAngle_Photography
+        </p>
+
+        <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+          {instagramPosts.map((post) => (
+            <div key={post.id} style={{ position: 'relative', aspectRatio: '1/1', overflow: 'hidden', cursor: 'pointer' }}>
+              <img 
+                src={post.image} 
+                alt="Instagram post" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} 
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              />
+              
+              {post.type === 'video' && (
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', opacity: 0.9 }}>
+                  <Play fill="white" size={48} />
+                </div>
+              )}
+              
+              {post.type === 'carousel' && (
+                <div style={{ position: 'absolute', top: '1rem', right: '1rem', color: 'white', opacity: 0.9 }}>
+                  <Copy size={24} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );
