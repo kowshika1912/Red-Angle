@@ -178,17 +178,17 @@ const Portfolio = () => {
             style={{ textAlign: 'center' }}
           >
             <motion.div variants={itemVariants} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
-              <Sparkles size={16} color="#d4a557" />
+              <Sparkles size={16} color="var(--gold-300)" />
               <span style={{
                 textTransform: 'uppercase',
                 letterSpacing: '0.5em',
                 fontSize: '0.8rem',
                 fontWeight: 600,
-                color: '#d4a557',
+                color: 'var(--gold-300)',
               }}>
                 Our Work
               </span>
-              <Sparkles size={16} color="#d4a557" />
+              <Sparkles size={16} color="var(--gold-300)" />
             </motion.div>
 
             {/* Premium Staggered Text Reveal */}
@@ -224,8 +224,8 @@ const Portfolio = () => {
                   fontStyle: 'italic',
                   fontWeight: 400,
                   paddingRight: '0.5rem',
-                  color: '#d4a557',
-                  WebkitTextFillColor: '#d4a557'
+                  color: 'var(--gold-300)',
+                  WebkitTextFillColor: 'var(--gold-300)'
                 }}>The</span> Gallery.
               </motion.h1>
             </div>

@@ -290,7 +290,7 @@ const Services = () => {
             animate="visible"
             style={{ textAlign: 'center' }}
           >
-            <motion.div variants={itemVariants} className="section-tag" style={{ justifyContent: 'center', color: 'var(--gold-300, #d4a557)', textTransform: 'uppercase', letterSpacing: '3px', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1.5rem' }}>
+            <motion.div variants={itemVariants} className="section-tag" style={{ justifyContent: 'center', color: 'var(--gold-300)', textTransform: 'uppercase', letterSpacing: '3px', fontSize: '0.875rem', fontWeight: 600, marginBottom: '1.5rem' }}>
               — WHAT WE OFFER —
             </motion.div>
             

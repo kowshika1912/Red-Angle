@@ -23,11 +23,11 @@ const YoutubeIcon = () => (
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="container">
+      <div className="container" style={{ paddingTop: 'var(--space-xl)' }}>
         <div className="footer-grid">
           {/* Brand */}
           <div>
-            <div className="footer-brand-logo">Red-Angle Studio</div>
+            <div className="footer-brand-logo">Red-Angle</div>
             <p className="footer-description">
               Capturing life's most precious moments with artistry and passion. 
               Professional photography and videography for every milestone.
