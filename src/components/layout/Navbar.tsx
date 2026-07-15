@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { StaggeredMenu } from './StaggeredMenu';
 import PillNav from './PillNav';
 
@@ -15,6 +15,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -22,12 +23,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const lightPages = ['/portfolio', '/services', '/blog', '/packages', '/client-gallery'];
+  const isLightPage = lightPages.some(p => location.pathname.startsWith(p));
+  const isDarkText = !scrolled && isLightPage;
+  const textColor = isDarkText ? '#000000' : '#ffffff';
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="navbar-inner">
           {/* Logo */}
-          <Link to="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Link to="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: textColor }}>
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
               <span>RED-ANGLE</span>
               <span>STUDIOS</span>
@@ -38,10 +44,10 @@ const Navbar = () => {
           <div className="desktop-only">
             <PillNav
               items={navLinks.map(l => ({ label: l.label, href: l.to }))}
-              baseColor="#fff"
+              baseColor={textColor}
               pillColor="transparent"
-              hoveredPillTextColor="#000"
-              pillTextColor="#fff"
+              hoveredPillTextColor={isDarkText ? "#ffffff" : "#000000"}
+              pillTextColor={textColor}
             />
           </div>
 
@@ -56,7 +62,7 @@ const Navbar = () => {
                 { label: 'YouTube', link: '#' }
               ]}
               isFixed={true}
-              menuButtonColor="#fff"
+              menuButtonColor={textColor}
               openMenuButtonColor="#000"
               colors={['#B497CF', '#5227FF']}
               accentColor="var(--gold-300)"

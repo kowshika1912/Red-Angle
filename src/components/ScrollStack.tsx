@@ -63,8 +63,8 @@ const ScrollStack = ({
   const getElementOffset = useCallback(
     element => {
       if (useWindowScroll) {
-        const rect = element.getBoundingClientRect();
-        return rect.top + window.scrollY;
+        const scrollerTop = scrollerRef.current ? scrollerRef.current.getBoundingClientRect().top + window.scrollY : 0;
+        return scrollerTop + element.offsetTop;
       } else {
         return element.offsetTop;
       }
@@ -186,28 +186,19 @@ const ScrollStack = ({
 
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        touchMultiplier: 2,
-        infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.1,
-        syncTouch: true,
-        syncTouchLerp: 0.075
-      });
-
-      lenis.on('scroll', handleScroll);
-
-      const raf = time => {
-        lenis.raf(time);
+      window.addEventListener('scroll', handleScroll);
+      
+      let lastScrollY = window.scrollY;
+      const raf = () => {
+        if (window.scrollY !== lastScrollY) {
+          handleScroll();
+          lastScrollY = window.scrollY;
+        }
         animationFrameRef.current = requestAnimationFrame(raf);
       };
       animationFrameRef.current = requestAnimationFrame(raf);
 
-      lenisRef.current = lenis;
-      return lenis;
+      return null;
     } else {
       const scroller = scrollerRef.current;
       if (!scroller) return;
@@ -272,6 +263,9 @@ const ScrollStack = ({
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (useWindowScroll) {
+        window.removeEventListener('scroll', handleScroll);
       }
       if (lenisRef.current) {
         lenisRef.current.destroy();

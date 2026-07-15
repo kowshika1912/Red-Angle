@@ -464,7 +464,7 @@ textarea.form-input {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem;
   letter-spacing: 0.1em;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .navbar-logo span {

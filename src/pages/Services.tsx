@@ -3,6 +3,7 @@ import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Camera, Film, Star, Users, Heart, Briefcase, Baby, Shirt, X } from 'lucide-react';
 import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
+import Footer from '../components/layout/Footer';
 
 import img1 from '../assets/download (2).jpg';
 import img2 from '../assets/download (3).jpg';
@@ -308,16 +309,17 @@ const Services = () => {
       </section>
 
       {/* ==================== SCROLL STACK SERVICES ==================== */}
-      <section style={{ width: '100%', height: '100vh', background: 'var(--color-bg)' }}>
+      <section style={{ width: '100%', background: 'var(--color-bg)' }}>
         <ScrollStack
           itemDistance={150}
           itemScale={0.03}
           itemStackDistance={30}
-          stackPosition="20%"
-          scaleEndPosition="10%"
+          stackPosition="5%"
+          scaleEndPosition="0%"
           baseScale={0.85}
           rotationAmount={0}
           blurAmount={0.5}
+          useWindowScroll={true}
         >
           {services.map((service, idx) => (
             <ScrollStackItem key={idx}>
