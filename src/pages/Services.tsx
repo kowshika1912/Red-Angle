@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Camera, Film, Star, Users, Heart, Briefcase, Baby, Shirt, X } from 'lucide-react';
-import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, Navigation, Pagination, Mousewheel } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import Footer from '../components/layout/Footer';
 
 import img1 from '../assets/download (2).jpg';
@@ -320,21 +325,19 @@ const Services = () => {
         </div>
       </section>
 
-      {/* ==================== SCROLL STACK SERVICES ==================== */}
-      <section style={{ width: '100%', background: 'var(--color-bg)' }}>
-        <ScrollStack
-          itemDistance={150}
-          itemScale={0.03}
-          itemStackDistance={30}
-          stackPosition="5%"
-          scaleEndPosition="0%"
-          baseScale={0.85}
-          rotationAmount={0}
-          blurAmount={0.5}
-          useWindowScroll={true}
+      {/* ==================== SWIPER CARDS SERVICES ==================== */}
+      <section style={{ width: '100%', background: 'var(--color-bg)', padding: '4rem 2rem 8rem', display: 'flex', justifyContent: 'center' }}>
+        <Swiper
+          effect={'cards'}
+          grabCursor={true}
+          modules={[EffectCards, Navigation, Pagination, Mousewheel]}
+          navigation
+          pagination={{ clickable: true }}
+          mousewheel={{ forceToAxis: true }}
+          style={{ width: '100%', maxWidth: '900px', height: '600px', padding: '2rem' }}
         >
           {services.map((service, idx) => (
-            <ScrollStackItem key={idx}>
+            <SwiperSlide key={idx} style={{ borderRadius: '28px', overflow: 'hidden' }}>
               <div 
                 id={service.category.toLowerCase()}
                 className="service-card"
@@ -445,9 +448,9 @@ const Services = () => {
                   </div>
                 </div>
               </div>
-            </ScrollStackItem>
+            </SwiperSlide>
           ))}
-        </ScrollStack>
+        </Swiper>
       </section>
 
       {/* ==================== CTA ==================== */}
