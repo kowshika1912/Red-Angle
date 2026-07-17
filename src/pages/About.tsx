@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Play, Copy } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import img5 from '../assets/Manifesting Marriage Official_ Instagram, Facebook _ Linktree.jpg';
+import img7 from '../assets/Tamil Wedding in London.jpg';
+import img3 from '../assets/download (4).jpg';
+import img6 from '../assets/South Indian Bridal Look ✨️.jpg';
+
 const customEasing: [number, number, number, number] = [0.6, 0.01, -0.05, 0.95];
 
 const categories = [
-  { id: '01', title: 'PRE WEDDING', image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1600&auto=format&fit=crop' },
-  { id: '02', title: 'POST WEDDING', image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1600&auto=format&fit=crop' },
-  { id: '03', title: 'MATERNITY', image: 'https://images.unsplash.com/photo-1557002664-c2406afad222?q=80&w=1600&auto=format&fit=crop' },
-  { id: '04', title: 'FASHION', image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1600&auto=format&fit=crop' }
+  { id: '01', title: 'PRE WEDDING', image: img5 },
+  { id: '02', title: 'POST WEDDING', image: img7 },
+  { id: '03', title: 'MATERNITY', image: img3 },
+  { id: '04', title: 'FASHION', image: img6 }
 ];
 
 const testimonials = [
@@ -28,6 +34,7 @@ const instagramPosts = [
 ];
 
 const About = () => {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -100,7 +107,7 @@ const About = () => {
       </section>
 
       {/* Vision, Mission, Achievements Section */}
-      <section style={{ background: '#ffffff', color: '#333333', padding: '6rem 2rem' }}>
+      <section style={{ background: '#ffffff', color: '#333333', padding: '6rem 2rem 2rem' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem' }}>
           
           {/* Vision */}
@@ -134,14 +141,21 @@ const About = () => {
       </section>
 
       {/* Interactive Categories Gallery */}
-      <section style={{ display: 'flex', minHeight: '90vh', background: '#ffffff', width: '100%', overflow: 'hidden', flexWrap: 'wrap' }}>
+      <section style={{ display: 'flex', minHeight: '70vh', background: '#ffffff', width: '100%', overflow: 'hidden', flexWrap: 'wrap', padding: '2rem 2rem 4rem', gap: '2rem' }}>
         {/* Sidebar */}
-        <div style={{ flex: '1', minWidth: '300px', maxWidth: '400px', padding: '4rem 6rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#ffffff', zIndex: 10 }}>
+        <div style={{ flex: '1', minWidth: '300px', maxWidth: '450px', padding: '2rem 4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#ffffff', zIndex: 10 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
             {categories.map((cat, idx) => (
               <div 
                 key={cat.id} 
-                onClick={() => setActiveCategory(idx)}
+                onMouseEnter={() => setActiveCategory(idx)}
+                onClick={() => {
+                  let hash = 'wedding';
+                  if (cat.title === 'PRE WEDDING') hash = 'pre_wedding';
+                  else if (cat.title === 'MATERNITY') hash = 'maternity';
+                  else if (cat.title === 'FASHION') hash = 'fashion';
+                  navigate(`/services#${hash}`);
+                }}
                 style={{ cursor: 'pointer', opacity: activeCategory === idx ? 1 : 0.4, transition: 'opacity 0.4s' }}
               >
                 <div style={{ fontSize: '0.85rem', color: '#555', marginBottom: '0.8rem', letterSpacing: '0.2em', fontWeight: 500 }}>{cat.id}</div>
@@ -168,7 +182,7 @@ const About = () => {
         </div>
 
         {/* Main Image View */}
-        <div style={{ flex: '2', minWidth: '500px', position: 'relative' }}>
+        <div style={{ flex: '2', minWidth: '400px', maxWidth: '1000px', height: '650px', margin: 'auto', position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.15)' }}>
           <AnimatePresence mode="wait">
             <motion.img 
               key={activeCategory}
@@ -185,8 +199,8 @@ const About = () => {
       </section>
 
       {/* Testimonial Section */}
-      <section style={{ background: '#ffffff', color: '#111111', padding: '8rem 2rem 2rem', textAlign: 'center', position: 'relative' }}>
-        <div style={{ width: '1px', height: '80px', background: 'rgba(0,0,0,0.2)', margin: '0 auto 4rem' }}></div>
+      <section style={{ background: '#ffffff', color: '#111111', padding: '2rem 2rem 2rem', textAlign: 'center', position: 'relative' }}>
+        <div style={{ width: '1px', height: '40px', background: 'rgba(0,0,0,0.2)', margin: '0 auto 2rem' }}></div>
         
         <h2 style={{ fontFamily: 'var(--font-heading, serif)', fontSize: '1.8rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '1rem', fontWeight: 400 }}>
           What Our Client Says

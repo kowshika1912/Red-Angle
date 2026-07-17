@@ -418,13 +418,23 @@ export const StaggeredMenu = ({
         <div className="sm-panel-inner">
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (
-              items.map((it, idx) => (
-                <li className="sm-panel-itemWrap" key={it.label + idx}>
-                  <Link className="sm-panel-item" to={it.to || it.link || '#'} onClick={closeMenu} aria-label={it.ariaLabel} data-index={idx + 1}>
-                    <span className="sm-panel-itemLabel">{it.label}</span>
-                  </Link>
-                </li>
-              ))
+              items.map((it, idx) => {
+                const url = it.to || it.link || '#';
+                const isExt = url.startsWith('http://') || url.startsWith('https://');
+                return (
+                  <li className="sm-panel-itemWrap" key={it.label + idx}>
+                    {isExt ? (
+                      <a className="sm-panel-item" href={url} onClick={closeMenu} aria-label={it.ariaLabel} data-index={idx + 1} target="_blank" rel="noopener noreferrer">
+                        <span className="sm-panel-itemLabel">{it.label}</span>
+                      </a>
+                    ) : (
+                      <Link className="sm-panel-item" to={url} onClick={closeMenu} aria-label={it.ariaLabel} data-index={idx + 1}>
+                        <span className="sm-panel-itemLabel">{it.label}</span>
+                      </Link>
+                    )}
+                  </li>
+                );
+              })
             ) : (
               <li className="sm-panel-itemWrap" aria-hidden="true">
                 <span className="sm-panel-item">

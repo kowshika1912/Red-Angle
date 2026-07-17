@@ -1,105 +1,151 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Pin } from 'lucide-react'; // Fallback for pinterest
 
-// Social media SVG icons (not in lucide-react)
-const InstagramIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-  </svg>
-);
-const FacebookIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-  </svg>
-);
-const YoutubeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+import logoImg from '../../assets/red_angle_logo (1).png';
+
+const FacebookIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
   </svg>
 );
 
+const InstagramIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+  </svg>
+);
+
+const LinkedinIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle>
+  </svg>
+);
+
+const YoutubeIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2.5 7.1A2.5 2.5 0 0 1 5 4.6h14a2.5 2.5 0 0 1 2.5 2.5v9.8a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5V7.1z"></path><path d="m10 15 5-3-5-3v6z"></path>
+  </svg>
+);
+
+const PinterestIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s-4-6.5-4-10a4 4 0 1 1 8 0c0 3.5-4 10-4 10z"/><circle cx="12" cy="12" r="1.5"/>
+  </svg>
+);
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="container" style={{ paddingTop: 'var(--space-xl)' }}>
-        <div className="footer-grid">
-          {/* Brand */}
-          <div>
-            <div className="footer-brand-logo">Red-Angle</div>
-            <p className="footer-description">
-              Capturing life's most precious moments with artistry and passion. 
-              Professional photography and videography for every milestone.
-            </p>
-            <div className="social-links" style={{ marginTop: 'var(--space-xl)' }}>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="social-link" aria-label="Instagram">
-                <InstagramIcon />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="social-link" aria-label="Facebook">
-                <FacebookIcon />
-              </a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="social-link" aria-label="YouTube">
-                <YoutubeIcon />
-              </a>
+    <footer className="footer" style={{ borderTop: '1px solid var(--color-border-2)', background: 'var(--color-bg)', position: 'relative', margin: 0, padding: 0 }}>
+      <div className="container" style={{ paddingTop: '4rem', paddingBottom: '2rem' }}>
+        <div className="new-footer-grid" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr 1fr', 
+          textAlign: 'center',
+          alignItems: 'center',
+          marginBottom: '2rem'
+        }}>
+          {/* Left Column: Follow Us */}
+          <div style={{ padding: '0 2rem' }}>
+            <h4 style={{ 
+              fontFamily: 'var(--font-display)', 
+              fontSize: '1.25rem', 
+              letterSpacing: '0.15em', 
+              color: 'var(--text-secondary)',
+              marginBottom: '1.5rem',
+              fontWeight: 400
+            }}>
+              FOLLOW US
+            </h4>
+            <a href="mailto:contact@redanglestudio.com" style={{ 
+              display: 'block', 
+              color: 'var(--text-secondary)', 
+              fontStyle: 'italic',
+              marginBottom: '1.5rem',
+              textDecoration: 'none',
+              fontSize: '0.95rem'
+            }}>
+              hello@redanglestudio.com
+            </a>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', width: '80%', margin: '0 auto' }}>
+              <a href="#" style={{ color: 'var(--text-secondary)' }}><FacebookIcon size={15} /></a>
+              <div style={{ flex: 1, height: '1px', background: 'var(--color-border-2)' }} />
+              <a href="https://www.instagram.com/redanglestudio?igsh=YjcwbXlsNnd0MWE3" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)' }}><InstagramIcon size={15} /></a>
+              <div style={{ flex: 1, height: '1px', background: 'var(--color-border-2)' }} />
+              <a href="#" style={{ color: 'var(--text-secondary)' }}><LinkedinIcon size={15} /></a>
+              <div style={{ flex: 1, height: '1px', background: 'var(--color-border-2)' }} />
+              <a href="#" style={{ color: 'var(--text-secondary)' }}><PinterestIcon size={15} /></a>
+              <div style={{ flex: 1, height: '1px', background: 'var(--color-border-2)' }} />
+              <a href="#" style={{ color: 'var(--text-secondary)' }}><YoutubeIcon size={15} /></a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="footer-heading">Quick Links</h4>
-            <ul className="footer-links">
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/portfolio">Portfolio</Link></li>
-              <li><Link to="/services">Services</Link></li>
-              <li><Link to="/packages">Packages</Link></li>
-              <li><Link to="/blog">Blog</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-            </ul>
+          {/* Middle Column: Emblem / Logo */}
+          <div style={{ 
+            borderLeft: '1px solid var(--color-border-2)', 
+            borderRight: '1px solid var(--color-border-2)',
+            padding: '2rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Link to="/">
+              <img src={logoImg} alt="Red-Angle Studio" style={{ maxHeight: '60px', width: 'auto' }} />
+            </Link>
           </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="footer-heading">Services</h4>
-            <ul className="footer-links">
-              <li><Link to="/portfolio?cat=WEDDING">Wedding Photography</Link></li>
-              <li><Link to="/portfolio?cat=PRE_WEDDING">Pre-Wedding</Link></li>
-              <li><Link to="/portfolio?cat=CANDID">Candid Photography</Link></li>
-              <li><Link to="/portfolio?cat=MATERNITY">Maternity</Link></li>
-              <li><Link to="/portfolio?cat=KIDS">Kids Photography</Link></li>
-              <li><Link to="/portfolio?cat=FASHION">Fashion</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="footer-heading">Contact</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-              <li style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'flex-start' }}>
-                <Phone size={14} color="var(--gold-300)" style={{ marginTop: 3, flexShrink: 0 }} />
-                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>+91 98765 43210</span>
-              </li>
-              <li style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'flex-start' }}>
-                <Mail size={14} color="var(--gold-300)" style={{ marginTop: 3, flexShrink: 0 }} />
-                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>hello@redanglestudio.com</span>
-              </li>
-              <li style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'flex-start' }}>
-                <MapPin size={14} color="var(--gold-300)" style={{ marginTop: 3, flexShrink: 0 }} />
-                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)' }}>123 Studio Lane, Mumbai, Maharashtra 400001</span>
-              </li>
-            </ul>
+          {/* Right Column: Reach Us */}
+          <div style={{ padding: '0 2rem' }}>
+            <h4 style={{ 
+              fontFamily: 'var(--font-display)', 
+              fontSize: '1.25rem', 
+              letterSpacing: '0.15em', 
+              color: 'var(--text-secondary)',
+              marginBottom: '1.5rem',
+              fontWeight: 400
+            }}>
+              Reach Us
+            </h4>
+            <div style={{ 
+              color: 'var(--text-secondary)', 
+              fontStyle: 'italic',
+              marginBottom: '1.5rem',
+              fontSize: '0.95rem'
+            }}>
+              +91 98765 43210 &nbsp;|&nbsp; +91 98765 43211
+            </div>
+            <Link to="/contact" style={{ 
+              fontFamily: 'var(--font-display)', 
+              fontSize: '1.25rem', 
+              letterSpacing: '0.15em', 
+              color: 'var(--text-secondary)',
+              textDecoration: 'none'
+            }}>
+              FAQ's
+            </Link>
           </div>
         </div>
+      </div>
 
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Red-Angle Studio. All rights reserved.</p>
-          <Link to="/admin/login" style={{ color: 'var(--text-muted)', fontSize: 'var(--text-xs)' }}>
-            Admin
-          </Link>
-        </div>
+      {/* Bottom Bar */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        background: 'var(--gold-100)',
+        padding: '0.5rem var(--space-xl)',
+        borderTop: '1px solid var(--color-border-2)',
+        fontSize: '0.8rem',
+        color: 'var(--text-secondary)',
+        fontStyle: 'italic',
+        width: '100%'
+      }}>
+        <div>© Copyrights Red-Angle Studio. All Rights Reserved.</div>
+        <div>Powered by iTech</div>
       </div>
     </footer>
   );
 };
 
 export default Footer;
+

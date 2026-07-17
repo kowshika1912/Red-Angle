@@ -8,13 +8,15 @@ import { ReactLenis } from '@studio-freight/react-lenis';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import WhatsAppFloat from './components/layout/WhatsAppFloat';
+
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
 import Home from './pages/Home';
 import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Services from './pages/Services';
+import CollageGallery from './pages/CollageGallery';
+import Films from './pages/Films';
 import Packages from './pages/Packages';
 import ClientGallery from './pages/ClientGallery';
 import Blog from './pages/Blog';
@@ -53,38 +55,44 @@ function AppContent() {
         }}
       />
 
-      {/* Navbar (not on admin) */}
-      {!isAdminPage && <Navbar />}
+      {/* Main Layout Wrapper to keep footer at bottom */}
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+        {/* Navbar (not on admin) */}
+        {!isAdminPage && <Navbar />}
 
-      <AnimatePresence mode="wait">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/client-gallery" element={<ClientGallery />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/contact" element={<Contact />} />
+        <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+          <AnimatePresence mode="wait">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/gallery" element={<CollageGallery />} />
+              <Route path="/films" element={<Films />} />
+              <Route path="/packages" element={<Packages />} />
+              <Route path="/client-gallery" element={<ClientGallery />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/contact" element={<Contact />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/albums" element={<ProtectedRoute><AdminAlbums /></ProtectedRoute>} />
-          <Route path="/admin/albums/:id/images" element={<ProtectedRoute><AdminImages /></ProtectedRoute>} />
-          <Route path="/admin/blog" element={<ProtectedRoute><AdminBlog /></ProtectedRoute>} />
-          <Route path="/admin/packages" element={<ProtectedRoute><AdminPackages /></ProtectedRoute>} />
-          <Route path="/admin/messages" element={<ProtectedRoute><AdminMessages /></ProtectedRoute>} />
-        </Routes>
-      </AnimatePresence>
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/albums" element={<ProtectedRoute><AdminAlbums /></ProtectedRoute>} />
+              <Route path="/admin/albums/:id/images" element={<ProtectedRoute><AdminImages /></ProtectedRoute>} />
+              <Route path="/admin/blog" element={<ProtectedRoute><AdminBlog /></ProtectedRoute>} />
+              <Route path="/admin/packages" element={<ProtectedRoute><AdminPackages /></ProtectedRoute>} />
+              <Route path="/admin/messages" element={<ProtectedRoute><AdminMessages /></ProtectedRoute>} />
+            </Routes>
+          </AnimatePresence>
+        </main>
 
-      {/* Footer (not on admin) */}
-      {!isAdminPage && <Footer />}
+        {/* Footer (not on admin) */}
+        {!isAdminPage && <Footer />}
+      </div>
 
-      {/* WhatsApp float button */}
-      {!isAdminPage && <WhatsAppFloat />}
+
     </ReactLenis>
   );
 }

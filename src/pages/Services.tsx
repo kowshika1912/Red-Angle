@@ -192,7 +192,7 @@ const Modal = ({ service, onClose, color }: any) => {
               ))}
             </ul>
             <div style={{ marginTop: '3.5rem', display: 'flex', gap: '1rem' }}>
-              <Link to={`/portfolio?cat=${service.category}`} style={{ display: 'inline-flex', padding: '1rem 2.5rem', borderRadius: '3rem', fontSize: '0.85rem', background: 'var(--text-primary)', color: 'var(--color-bg)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
+              <Link to={`/gallery?cat=${service.category}`} style={{ display: 'inline-flex', padding: '1rem 2.5rem', borderRadius: '3rem', fontSize: '0.85rem', background: 'var(--text-primary)', color: 'var(--color-bg)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
                 View Gallery
               </Link>
               <Link to={`/packages`} style={{ display: 'inline-flex', padding: '1rem 2.5rem', borderRadius: '3rem', fontSize: '0.85rem', border: '1px solid var(--text-primary)', color: 'var(--text-primary)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
@@ -279,6 +279,18 @@ const FannedFolders = () => {
 }
 
 const Services = () => {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500); // Small delay to let ScrollStack calculate sizes
+    }
+  }, []);
+
   return (
     <div className="page-enter" style={{ background: 'var(--color-bg)', minHeight: '100vh', overflowX: 'hidden' }}>
       
@@ -323,17 +335,13 @@ const Services = () => {
         >
           {services.map((service, idx) => (
             <ScrollStackItem key={idx}>
-              <div style={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                borderRadius: '28px',
-                overflow: 'hidden',
-                background: '#fff',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
-              }}>
+              <div 
+                id={service.category.toLowerCase()}
+                className="service-card"
+                style={{ '--card-color': folderColors[idx] } as React.CSSProperties}
+              >
                 {/* Image Side */}
-                <div style={{ position: 'relative', width: '40%', flexShrink: 0 }}>
+                <div className="service-image-col">
                   <img
                     src={service.image}
                     alt={service.title}
@@ -369,15 +377,7 @@ const Services = () => {
                 </div>
 
                 {/* Content Side */}
-                <div style={{
-                  flex: 1,
-                  padding: '2.5rem 3rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  background: '#fff',
-                  borderLeft: `4px solid ${folderColors[idx]}`,
-                }}>
+                <div className="service-content-col">
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: folderColors[idx], marginBottom: '0.5rem' }}>
                     {service.subtitle}
                   </p>
@@ -390,10 +390,10 @@ const Services = () => {
                   }}>
                     {service.title}
                   </h3>
-                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.75, fontSize: '0.95rem', marginBottom: '1.5rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  <p className="service-description" style={{ color: 'var(--text-secondary)', lineHeight: 1.75, fontSize: '0.95rem', marginBottom: '1.5rem' }}>
                     {service.description}
                   </p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.75rem' }}>
+                  <div className="service-features" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.75rem' }}>
                     {service.features.slice(0, 4).map((f: string, i: number) => (
                       <span key={i} style={{
                         fontSize: '0.78rem',
@@ -407,9 +407,9 @@ const Services = () => {
                       </span>
                     ))}
                   </div>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div className="service-actions" style={{ display: 'flex', gap: '0.75rem' }}>
                     <Link
-                      to={`/portfolio?cat=${service.category}`}
+                      to={`/gallery?cat=${service.category}`}
                       style={{
                         display: 'inline-flex',
                         padding: '0.65rem 1.5rem',
@@ -471,6 +471,74 @@ const Services = () => {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .service-card {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          border-radius: 28px;
+          overflow: hidden;
+          background: #fff;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .service-image-col {
+          position: relative;
+          width: 40%;
+          flex-shrink: 0;
+        }
+        .service-content-col {
+          flex: 1;
+          padding: 2.5rem 3rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          background: #fff;
+          border-left: 4px solid var(--card-color);
+        }
+        .service-description {
+          -webkit-line-clamp: 3;
+        }
+        
+        @media (max-width: 768px) {
+          .service-card {
+            flex-direction: column;
+          }
+          .service-image-col {
+            width: 100%;
+            height: 35%;
+          }
+          .service-content-col {
+            border-left: none;
+            border-top: 4px solid var(--card-color);
+            padding: 1.5rem;
+            justify-content: flex-start;
+          }
+          .service-description {
+            -webkit-line-clamp: 4;
+            font-size: 0.85rem !important;
+            margin-bottom: 1rem !important;
+          }
+          .service-features {
+            margin-bottom: 1rem !important;
+          }
+          .service-features span {
+            font-size: 0.7rem !important;
+            padding: 0.2rem 0.6rem !important;
+          }
+          .service-actions {
+            flex-direction: row;
+            gap: 0.5rem !important;
+          }
+          .service-actions > a {
+            flex: 1;
+            padding: 0.6rem 0.5rem !important;
+            font-size: 0.75rem !important;
+            justify-content: center;
+            text-align: center;
+          }
+        }
+      `}</style>
     </div>
   );
 };

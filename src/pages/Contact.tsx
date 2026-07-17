@@ -34,7 +34,7 @@ const InfoCard = ({ icon, title, children, linkText, linkHref }: any) => (
     <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, flexGrow: 1, marginBottom: '1.5rem' }}>
       {children}
     </div>
-    <a href={linkHref} style={{ 
+    <a href={linkHref} target={linkHref.startsWith('http') ? '_blank' : '_self'} rel="noreferrer" style={{ 
       display: 'inline-flex', 
       alignItems: 'center', 
       gap: '0.5rem', 
@@ -181,7 +181,7 @@ const Contact = () => {
                 icon={<MapPin size={32} strokeWidth={1} />} 
                 title="Office Location" 
                 linkText="Direction" 
-                linkHref="#"
+                linkHref="https://www.google.com/maps/search/?api=1&query=Mumbai,+Maharashtra"
               >
                 123 Studio Lane, Mumbai,<br />
                 Maharashtra 400001
@@ -191,7 +191,7 @@ const Contact = () => {
                 icon={<Clock size={32} strokeWidth={1} />} 
                 title="Working Hours" 
                 linkText="Learn more" 
-                linkHref="#"
+                linkHref="#contact-form"
               >
                 Sun to Fri: <strong>10am</strong> to <strong>06pm</strong><br />
                 Sat: <strong>10am</strong> to <strong>02pm</strong>
@@ -212,7 +212,7 @@ const Contact = () => {
       </section>
 
       {/* Bottom Section (Form + Have any query) */}
-      <section style={{ padding: '2rem 5% 6rem' }}>
+      <section id="contact-form" style={{ padding: '2rem 5% 6rem' }}>
         <motion.div 
           initial={{ opacity: 0, y: 40 }} 
           whileInView={{ opacity: 1, y: 0 }} 

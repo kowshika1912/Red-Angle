@@ -3,12 +3,16 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import { StaggeredMenu } from './StaggeredMenu';
 import PillNav from './PillNav';
 
+import logoImg from '../../assets/red_angle_logo (1).png';
+
 const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About Us' },
   { to: '/portfolio', label: 'Portfolio' },
   { to: '/services', label: 'Services' },
+  { to: '/films', label: 'Films' },
   { to: '/packages', label: 'Packages' },
+  { to: '/client-gallery', label: 'Clients' },
   { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Book Us' },
 ];
@@ -23,7 +27,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const lightPages = ['/portfolio', '/services', '/blog', '/packages', '/client-gallery'];
+  const lightPages = ['/portfolio', '/services', '/blog', '/packages', '/client-gallery', '/films', '/gallery'];
   const isLightPage = lightPages.some(p => location.pathname.startsWith(p));
   const isDarkText = !scrolled && isLightPage;
   const textColor = isDarkText ? '#000000' : '#ffffff';
@@ -33,11 +37,8 @@ const Navbar = () => {
       <div className="container">
         <div className="navbar-inner">
           {/* Logo */}
-          <Link to="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: textColor }}>
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-              <span>RED-ANGLE</span>
-              <span>STUDIOS</span>
-            </div>
+          <Link to="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src={logoImg} alt="Red-Angle Studio" style={{ height: '40px', width: 'auto', filter: textColor === '#ffffff' ? 'invert(1)' : 'none' }} />
           </Link>
 
           {/* Main Navigation Links (PillNav hover effect) */}
@@ -58,7 +59,7 @@ const Navbar = () => {
               items={navLinks}
               socialItems={[
                 { label: 'Facebook', link: '#' },
-                { label: 'Instagram', link: '#' },
+                { label: 'Instagram', link: 'https://www.instagram.com/redanglestudio?igsh=YjcwbXlsNnd0MWE3' },
                 { label: 'YouTube', link: '#' }
               ]}
               isFixed={true}

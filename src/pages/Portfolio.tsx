@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight, Camera, Sparkles } from 'lucide-react';
 import api, { getImageUrl } from '../api/client';
 import { Album, Image } from '../types';
@@ -26,14 +26,14 @@ import img11 from '../assets/The Wedding Story Of Two Crazy Adventurous People I
 
 const categories = [
   { key: '', label: 'All' },
-  { key: 'WEDDING', label: 'Wedding' },
-  { key: 'PRE_WEDDING', label: 'Pre-Wedding' },
-  { key: 'CANDID', label: 'Candid' },
-  { key: 'MATERNITY', label: 'Maternity' },
-  { key: 'KIDS', label: 'Kids' },
-  { key: 'FASHION', label: 'Fashion' },
-  { key: 'CORPORATE', label: 'Corporate' },
-  { key: 'COMMERCIAL', label: 'Commercial' },
+  { key: 'WEDDING', label: 'Wedding Photography' },
+  { key: 'PRE_WEDDING', label: 'Pre-Wedding Shoots' },
+  { key: 'CANDID', label: 'Candid Photography' },
+  { key: 'MATERNITY', label: 'Maternity Photography' },
+  { key: 'KIDS', label: 'Kids Photography' },
+  { key: 'FASHION', label: 'Fashion Photography' },
+  { key: 'CORPORATE', label: 'Corporate Events' },
+  { key: 'COMMERCIAL', label: 'Commercial Shoots' }
 ];
 
 const customEasing: [number, number, number, number] = [0.6, 0.01, -0.05, 0.95];
@@ -73,6 +73,7 @@ const itemVariants: Variants = {
 };
 
 const Portfolio = () => {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('');
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
@@ -169,7 +170,7 @@ const Portfolio = () => {
     <div className="page-enter" style={{ backgroundColor: '#ffffff', minHeight: '100vh', color: '#111111' }}>
 
       {/* Page Hero Section */}
-      <section className="page-hero" style={{ padding: '6rem 0 4rem', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+      <section className="page-hero" style={{ padding: '8rem 0 2rem', display: 'flex', alignItems: 'center' }}>
         <div className="container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <motion.div
             variants={containerVariants}
@@ -241,10 +242,10 @@ const Portfolio = () => {
       <section
         ref={galleryRef}
         className="section"
-        style={{ paddingTop: '2rem', paddingBottom: '4rem', scrollMarginTop: '2rem' }}
+        style={{ paddingTop: '2rem', paddingBottom: '16rem', scrollMarginTop: '2rem' }}
       >
         {/* Category Filters */}
-        <div className="container">
+        <div className="container" style={{ position: 'relative', zIndex: 100 }}>
           <div className="filter-tabs" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}>
             {categories.map((cat) => (
               <button
@@ -297,18 +298,27 @@ const Portfolio = () => {
                   <p style={{ color: '#999999', marginTop: '1rem' }}>No albums found in this category yet.</p>
                 </div>
               ) : (
-                <div style={{ width: '100%', height: '80vh' }}>
+                <div className="dome-container">
                   <DomeGallery 
                     images={albums.map(album => ({ 
                       src: album.coverImage ? getImageUrl(album.coverImage) : `https://picsum.photos/seed/${album.id}/800/1000`, 
-                      alt: album.title 
+                      alt: album.title,
+                      category: album.category
                     }))} 
-                    fit={0.5}
+                    fit={0.36}
+                    fitBasis="min"
                     maxVerticalRotationDeg={12}
                     segments={32}
                     dragDampening={2.2}
                     grayscale={false}
                     overlayBlurColor="transparent"
+                    onItemClick={(src, category) => {
+                      if (category) {
+                        navigate(`/services#${category.toLowerCase()}`);
+                      } else {
+                        navigate('/services');
+                      }
+                    }}
                   />
                 </div>
               )}
@@ -480,6 +490,20 @@ const Portfolio = () => {
           </Link>
         </div>
       </section>
+
+      <style>{`
+        .dome-container {
+          width: 100%;
+          height: 80vh;
+          margin-top: 10rem;
+        }
+        @media (max-width: 768px) {
+          .dome-container {
+            height: 60vh;
+            margin-top: 6rem;
+          }
+        }
+      `}</style>
     </div>
   );
 };

@@ -10,7 +10,7 @@
   list-style: none;
   display: flex;
   align-items: stretch;
-  gap: 12px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -26,18 +26,18 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 12px;
   background: var(--pill-bg, transparent);
   color: var(--pill-text, #fff);
   text-decoration: none;
   border-radius: 9999px;
   box-sizing: border-box;
   font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.85rem;
+  font-weight: 400;
+  font-size: 0.75rem;
   line-height: 0;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
   white-space: nowrap;
   cursor: pointer;
   position: relative;
@@ -85,13 +85,11 @@
 .pill.is-active::after {
   content: '';
   position: absolute;
-  bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
+  bottom: 8px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
   background: var(--base, #fff);
-  border-radius: 50%;
   z-index: 4;
 }
 

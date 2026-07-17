@@ -52,8 +52,8 @@ const getDataNumber = (el, name, fallback) => {
 
 function buildItems(pool, seg) {
   const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 2);
-  const evenYs = [-4, -2, 0, 2, 4];
-  const oddYs = [-3, -1, 1, 3, 5];
+  const evenYs = [-16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16];
+  const oddYs = [-15, -13, -11, -9, -7, -5, -3, -1, 1, 3, 5, 7, 9, 11, 13, 15];
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
@@ -72,13 +72,22 @@ function buildItems(pool, seg) {
 
   const normalizedImages = pool.map(image => {
     if (typeof image === 'string') {
-      return { src: image, alt: '' };
+      return { src: image, alt: '', category: '' };
     }
-    return { src: image.src || '', alt: image.alt || '' };
+    return { src: image.src || '', alt: image.alt || '', category: image.category || '' };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
 
+  // Completely shuffle the images for a mixed, random appearance
+  for (let i = usedImages.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = usedImages[i];
+    usedImages[i] = usedImages[j];
+    usedImages[j] = temp;
+  }
+
+  // Quick pass to minimize adjacent duplicates
   for (let i = 1; i < usedImages.length; i++) {
     if (usedImages[i].src === usedImages[i - 1].src) {
       for (let j = i + 1; j < usedImages.length; j++) {
@@ -95,7 +104,8 @@ function buildItems(pool, seg) {
   return coords.map((c, i) => ({
     ...c,
     src: usedImages[i].src,
-    alt: usedImages[i].alt
+    alt: usedImages[i].alt,
+    category: usedImages[i].category
   }));
 }
 
@@ -123,7 +133,8 @@ export default function DomeGallery({
   openedImageHeight = '350px',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
-  grayscale = true
+  grayscale = true,
+  onItemClick
 }) {
   const rootRef = useRef(null);
   const mainRef = useRef(null);
@@ -567,9 +578,13 @@ export default function DomeGallery({
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      if (onItemClick) {
+        onItemClick(e.currentTarget.dataset.src, e.currentTarget.parentElement.dataset.category);
+        return;
+      }
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement]
+    [openItemFromElement, onItemClick]
   );
 
   const onTilePointerUp = useCallback(
@@ -579,9 +594,13 @@ export default function DomeGallery({
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      if (onItemClick) {
+        onItemClick(e.currentTarget.dataset.src, e.currentTarget.parentElement.dataset.category);
+        return;
+      }
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement]
+    [openItemFromElement, onItemClick]
   );
 
   useEffect(() => {
@@ -611,6 +630,7 @@ export default function DomeGallery({
                 key={`${it.x},${it.y},${i}`}
                 className="item"
                 data-src={it.src}
+                data-category={it.category}
                 data-offset-x={it.x}
                 data-offset-y={it.y}
                 data-size-x={it.sizeX}
